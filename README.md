@@ -1,4 +1,4 @@
-## arangodb-net-core
+## BorderEast.ArangoDB.Client
 DotNetCore ArangoDB Driver, WIP
 
 Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclient.net) and [yojimbo87](https://github.com/yojimbo87/ArangoDB-NET), this is a .NETCoreApp1.1 ArangoDB Client Library.
