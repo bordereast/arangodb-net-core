@@ -1,20 +1,61 @@
-﻿using System;
+﻿using BorderEast.ArangoDB.Client.Connection;
+using BorderEast.ArangoDB.Client.Database.AQLCursor;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace BorderEast.ArangoDB.Client.Database
 {
 
     public class ArangoQuery<T>
     {
-        private string query;
+        private AQLQuery query;
+        private ConnectionPool<IConnection> connectionPool;
+        private ArangoDatabase database;
 
-        public ArangoQuery(string query) {
-
+        public ArangoQuery(string queryStr, ConnectionPool<IConnection> connectionPool, ArangoDatabase database) {
+            this.connectionPool = connectionPool;
+            this.database = database;
+            query = new AQLQuery()
+            {
+                Query = queryStr
+            };
         }
 
-        public List<T> ToList() {
-            return new List<T>();
+        public ArangoQuery(string queryStr, Dictionary<string, object> parameters, 
+            ConnectionPool<IConnection> connectionPool, ArangoDatabase database) 
+        {
+            this.connectionPool = connectionPool;
+            this.database = database;
+            query = new AQLQuery()
+            {
+                Query = queryStr,
+                Parameters = parameters
+            };
+        }
+
+        public ArangoQuery<T> WithParameters(Dictionary<string, object> parameters) {
+            this.query.Parameters = parameters;
+            return this;
+        }
+
+        public async Task<List<T>> ToList() {
+            
+            Payload payload = new Payload()
+            {
+                Content = JsonConvert.SerializeObject(query),
+                Method = HttpMethod.Post,
+                Path = "/_api/cursor"
+            };
+
+            var result = await database.GetResultAsync(payload);
+
+            var json = JsonConvert.DeserializeObject<AQLResult<T>>(result.Content);
+            return json.Result;
         }
 
 

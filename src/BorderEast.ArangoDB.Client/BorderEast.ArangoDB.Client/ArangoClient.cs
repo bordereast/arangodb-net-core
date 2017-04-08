@@ -14,8 +14,8 @@ namespace BorderEast.ArangoDB.Client
     {
         private readonly string DEFAULT = Res.Msg.Default;
         private static ArangoClient _client = new ArangoClient();
-        private readonly IDictionary<string, DatabaseSettings> databases = new SortedDictionary<string, DatabaseSettings>();
-        private readonly IDictionary<string, ConnectionPool<IConnection>> pools = new SortedDictionary<string, ConnectionPool<IConnection>>();
+        public readonly IDictionary<string, DatabaseSettings> databases = new SortedDictionary<string, DatabaseSettings>();
+        public readonly IDictionary<string, ConnectionPool<IConnection>> pools = new SortedDictionary<string, ConnectionPool<IConnection>>();
 
         private ArangoClient() { }
 
@@ -41,7 +41,7 @@ namespace BorderEast.ArangoDB.Client
                 throw new DatabaseNotFoundException(Res.Msg.ArangoDbNotFound);
             }
             
-            return new ArangoDatabase(databases[DEFAULT], pools[DEFAULT].GetConnection());
+            return new ArangoDatabase(databases[DEFAULT], pools[DEFAULT]);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace BorderEast.ArangoDB.Client
             if (!databases.ContainsKey(database)) {
                 throw new DatabaseNotFoundException(Res.Msg.ArangoDbNotFound);
             }
-            return new ArangoDatabase(databases[database], pools[database].GetConnection());
+            return new ArangoDatabase(databases[database], pools[database]);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace BorderEast.ArangoDB.Client
             }
             databases.Add(databaseSettings.DatabaseName, databaseSettings);
             pools.Add(databaseSettings.DatabaseName, new ConnectionPool<IConnection>(() => new HttpConnection(databaseSettings)));
-            return new ArangoDatabase(databases[databaseSettings.DatabaseName], pools[databaseSettings.DatabaseName].GetConnection());
+            return new ArangoDatabase(databases[databaseSettings.DatabaseName], pools[databaseSettings.DatabaseName]);
         }
     }
 }

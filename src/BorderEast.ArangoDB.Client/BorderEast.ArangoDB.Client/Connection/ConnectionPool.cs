@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BorderEast.ArangoDB.Client.Connection
 {
-    internal class ConnectionPool<Connection>
+    public class ConnectionPool<Connection>
     {
         private ConcurrentBag<Connection> _connections;
         private Func<Connection> _objectGenerator;

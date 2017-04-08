@@ -19,14 +19,18 @@ namespace ConsoleTestApp {
                 AutoCreate = true
             });
 
-            Dictionary<string, string> databases = new Dictionary<string, string>
+            Dictionary<string, object> databases = new Dictionary<string, object>
             {
                 { "*", "rw" },
-                { "saasy", "rw" }
+                { "saasy", 2 }
             };
             var json = JsonConvert.SerializeObject(databases);
 
             var client = ArangoClient.Client();
+
+            //var q = client.DB().Query<User>("", new { _key = 1235});
+
+            var u = client.DB().Query<User>("for r in User return r").ToList().Result;
 
             var user = client.DB().GetByKeyAsync<User>("1127162").Result;
             Console.WriteLine("user = " + user.Username);
