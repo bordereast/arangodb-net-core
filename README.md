@@ -10,3 +10,6 @@ I like to write AQL queries for ultimate flexibility. This will mainly focus on 
 I'm currently working on a managed foreign key feature. This will allow an entity to include another entity with a data annotation describing the foreign key. This will produce two tables in the database but allow users to work the entity as if it was a single document. I understand this is duplicating some relational database features, but I feel this is the most common feature lacking in client libraries. I don't feel this should be a database feature, as a Document based database shouldn't care how you model the data.
 
 ArangoDB has an excellent join feature via AQL, and this is the next logical step on the client side.
+
+### Connection Pools
+This client manages connection pools. It has two connection pools, one for HTTP and one for VelocyStream(not implemented yet). All methods are Async and a connection is obtained immediatly before use and released immediatly afterwards. This is handled internally, so consumers won't need to worry about closing connections. Also, each HTTPClient object is left undisposed, but only used by one Database instance at a time. This cuts down on overhead but makes connection use consistent between the HTTP and yet to be implemented TCP protocols.
