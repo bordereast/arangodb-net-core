@@ -19,20 +19,25 @@ namespace BorderEast.ArangoDB.Client.Connection
             client.BaseAddress = new Uri((databaseSettings.Protocol == ProtocolType.HTTPS ? "https" : "http") + 
                 "://" + databaseSettings.ServerAddress + ":" + databaseSettings.ServerPort + "/");
 
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
             
         }
 
-
-
-        public async Task<Result> GetAsync(Payload payload) {
+        private void AddHeaders() {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Clear();
             if (databaseSettings.DatabaseCredential != null) {
                 client.DefaultRequestHeaders.Add(
                     "Authorization",
                     "Basic " + Convert.ToBase64String(
                         Encoding.ASCII.GetBytes(databaseSettings.DatabaseCredential.UserName + ":" + databaseSettings.DatabaseCredential.Password)));
             }
+        }
+
+
+        public async Task<Result> GetAsync(Payload payload) {
+            AddHeaders();
 
             var message = new HttpRequestMessage(payload.Method, payload.Path);
 

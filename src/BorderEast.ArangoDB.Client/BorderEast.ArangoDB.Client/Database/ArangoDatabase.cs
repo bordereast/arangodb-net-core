@@ -1,4 +1,5 @@
 ﻿using BorderEast.ArangoDB.Client.Connection;
+using BorderEast.ArangoDB.Client.Models;
 using BorderEast.ArangoDB.Client.Utils;
 using Newtonsoft.Json;
 using System;
@@ -49,14 +50,31 @@ namespace BorderEast.ArangoDB.Client.Database
             return json;
         }
 
-        public T Update<T>(string key, Object item) {
-            return (T)(new Object());
+        public async Task<UpdatedDocument<T>> Update<T>(string key, T item) {
+            Type type = typeof(T);
+
+            HttpMethod method = new HttpMethod("PATCH");
+
+            Payload payload = new Payload()
+            {
+                Content = JsonConvert.SerializeObject(item),
+                Method = method,
+                Path = string.Format("/_api/document/{0}/{1}?mergeObjects=false&returnNew=true", type.Name, key)
+            };
+
+            var result = await GetResultAsync(payload);
+            
+            var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content);
+            return json;
         }
 
         internal async Task<Result> GetResultAsync(Payload payload) {
+
             // Get connection just before we use it
             IConnection connection = connectionPool.GetConnection();
+
             Result result = await connection.GetAsync(payload);
+
             // Put connection back immediatly after use
             connectionPool.PutConnection(connection);
             return result;
