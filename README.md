@@ -13,3 +13,14 @@ ArangoDB has an excellent join feature via AQL, and this is the next logical ste
 
 ### Connection Pools
 This client manages connection pools. It has two connection pools, one for HTTP and one for VelocyStream(not implemented yet). All methods are Async and a connection is obtained immediatly before use and released immediatly afterwards. This is handled internally, so consumers won't need to worry about closing connections. Also, each HTTPClient object is left undisposed, but only used by one Database instance at a time. This cuts down on overhead but makes connection use consistent between the HTTP and yet to be implemented TCP protocols.
+
+
+### Other Features
+Document Update (PATCH) now returns the Arango old revision and new document. Will probably make this configurable to save network traffic. UpdatedDocument class is returned from the `Client.DB().Update<T>(id, item)` method.
+
+### Feature Status
+Method | Status
+--- | --- 
+AQL Query | WIP
+GetByKeyAsync | Done
+UpdateAsync | Done
