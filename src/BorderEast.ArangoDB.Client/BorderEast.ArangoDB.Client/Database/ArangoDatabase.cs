@@ -41,7 +41,7 @@ namespace BorderEast.ArangoDB.Client.Database
             Payload payload = new Payload() {
                 Content = string.Empty,
                 Method = HttpMethod.Get,
-                Path = string.Format("/_api/document/{0}/{1}", type.Name, key)
+                Path = string.Format("_api/document/{0}/{1}", type.Name, key)
             };
             
             var result = await GetResultAsync(payload);
@@ -50,7 +50,7 @@ namespace BorderEast.ArangoDB.Client.Database
             return json;
         }
 
-        public async Task<UpdatedDocument<T>> Update<T>(string key, T item) {
+        public async Task<UpdatedDocument<T>> UpdateAsync<T>(string key, T item) {
             Type type = typeof(T);
 
             HttpMethod method = new HttpMethod("PATCH");
@@ -59,13 +59,35 @@ namespace BorderEast.ArangoDB.Client.Database
             {
                 Content = JsonConvert.SerializeObject(item),
                 Method = method,
-                Path = string.Format("/_api/document/{0}/{1}?mergeObjects=false&returnNew=true", type.Name, key)
+                Path = string.Format("_api/document/{0}/{1}?mergeObjects=false&returnNew=true", type.Name, key)
             };
 
             var result = await GetResultAsync(payload);
             
             var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content);
             return json;
+        }
+
+        public async Task<bool> DeleteAsync<T>(string key) {
+            Type type = typeof(T);
+            
+            Payload payload = new Payload()
+            {
+                Content = string.Empty,
+                Method = HttpMethod.Delete,
+                Path = string.Format("_api/document/{0}/{1}?silent=true", type.Name, key)
+            };
+
+            var result = await GetResultAsync(payload);
+
+            if(result.StatusCode == System.Net.HttpStatusCode.OK || 
+                result.StatusCode == System.Net.HttpStatusCode.Accepted) 
+            {
+                return true;
+            } else {
+                return false;
+            }
+                
         }
 
         internal async Task<Result> GetResultAsync(Payload payload) {

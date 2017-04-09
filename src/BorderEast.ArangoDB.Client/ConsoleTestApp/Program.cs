@@ -38,7 +38,7 @@ namespace ConsoleTestApp {
 
             user.Username = "andrew";
 
-            var updated = client.DB().Update("1127162", user).Result;
+            var updated = client.DB().UpdateAsync("1127162", user).Result;
             user = updated.New;
 
             Console.WriteLine("user = " + user.Username);

@@ -4,10 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConsoleTestApp
+namespace BorderEast.ArangoDB.ClientTest.MockData
 {
-    public class User
-    {
+    public class User {
         [JsonProperty(PropertyName = "userName", NullValueHandling = NullValueHandling.Ignore)]
         [ArangoField(Field = ArangoField.Id, Name = "userName", NamingType = NamingConvention.UnChanged)]
         public string Username { get; set; }
@@ -16,6 +15,6 @@ namespace ConsoleTestApp
         [ArangoField(Field = ArangoField.Id, Name = "passwd", NamingType = NamingConvention.UnChanged)]
         public string Password { get; set; }
 
-        
+
     }
 }

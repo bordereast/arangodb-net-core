@@ -16,8 +16,11 @@ namespace BorderEast.ArangoDB.Client.Connection
         public HttpConnection(DatabaseSettings databaseSettings) {
             this.databaseSettings = databaseSettings;
 
+            bool isSystem = databaseSettings.DatabaseName == "_system";
+
             client.BaseAddress = new Uri((databaseSettings.Protocol == ProtocolType.HTTPS ? "https" : "http") + 
-                "://" + databaseSettings.ServerAddress + ":" + databaseSettings.ServerPort + "/");
+                "://" + databaseSettings.ServerAddress + ":" + databaseSettings.ServerPort + "/" 
+                + (isSystem ? string.Empty : string.Format("_db/{0}/", databaseSettings.DatabaseName)));
 
             
             
@@ -31,7 +34,7 @@ namespace BorderEast.ArangoDB.Client.Connection
                 client.DefaultRequestHeaders.Add(
                     "Authorization",
                     "Basic " + Convert.ToBase64String(
-                        Encoding.ASCII.GetBytes(databaseSettings.DatabaseCredential.UserName + ":" + databaseSettings.DatabaseCredential.Password)));
+                        Encoding.UTF8.GetBytes(databaseSettings.DatabaseCredential.UserName + ":" + databaseSettings.DatabaseCredential.Password)));
             }
         }
 
@@ -39,7 +42,7 @@ namespace BorderEast.ArangoDB.Client.Connection
         public async Task<Result> GetAsync(Payload payload) {
             AddHeaders();
 
-            var message = new HttpRequestMessage(payload.Method, payload.Path);
+            var message = new HttpRequestMessage(payload.Method, client.BaseAddress + payload.Path);
 
             if (!string.IsNullOrEmpty(payload.Content)) {
                 message.Content = new StringContent(payload.Content, Encoding.UTF8, "application/json");

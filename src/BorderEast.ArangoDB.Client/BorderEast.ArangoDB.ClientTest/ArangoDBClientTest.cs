@@ -17,7 +17,7 @@ namespace BorderEast.ArangoDB.ClientTest
             ServerAddress = "localhost",
             ServerPort = 8529,
             SystemCredential = new System.Net.NetworkCredential("root", Environment.GetEnvironmentVariable("USERNAME")),
-            DatabaseCredential = new System.Net.NetworkCredential("root", Environment.GetEnvironmentVariable("USERNAME")),
+            DatabaseCredential = new System.Net.NetworkCredential("client-test", "client-test"),
             AutoCreate = true
         };
 
