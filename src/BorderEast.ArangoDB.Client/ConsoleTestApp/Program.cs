@@ -22,7 +22,7 @@ namespace ConsoleTestApp {
             Dictionary<string, object> databases = new Dictionary<string, object>
             {
                 { "*", "rw" },
-                { "saasy", 2 }
+                { "temp", 2 }
             };
             var json = JsonConvert.SerializeObject(databases);
 
