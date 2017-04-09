@@ -26,3 +26,4 @@ Method | Status
 AQL Query | WIP
 GetByKeyAsync | Done
 UpdateAsync | Done
+DeleteAsync | Done
