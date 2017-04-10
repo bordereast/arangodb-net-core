@@ -1,4 +1,4 @@
 language: csharp
-solution: /src/BorderEast.ArangoDB.Client/BorderEast.ArangoDB.Client.sln
+solution: BorderEast.ArangoDB.Client.sln
 install:
   - nuget restore /src/BorderEast.ArangoDB.Client/BorderEast.ArangoDB.Client.sln
