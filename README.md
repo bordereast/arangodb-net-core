@@ -1,6 +1,8 @@
 ## BorderEast.ArangoDB.Client
 .NETCoreApp1.1 ArangoDB Client Driver
 
+[![Build Status](https://travis-ci.org/bordereast/arangodb-net-core.svg?branch=master)](https://travis-ci.org/bordereast/arangodb-net-core)
+
 Contributions welcome, follow code style.
 
 ### AQL Based
