@@ -46,6 +46,10 @@ namespace BorderEast.ArangoDB.Client.Database
             
             var result = await GetResultAsync(payload);
 
+            if(result == null) {
+                return default(T);
+            }
+
             var json = JsonConvert.DeserializeObject<T>(result.Content);
             return json;
         }
@@ -88,6 +92,22 @@ namespace BorderEast.ArangoDB.Client.Database
                 return false;
             }
                 
+        }
+
+        public async Task<UpdatedDocument<T>> InsertAsync<T>(T item) {
+            Type type = typeof(T);
+
+            Payload payload = new Payload()
+            {
+                Content = JsonConvert.SerializeObject(item),
+                Method = HttpMethod.Post,
+                Path = string.Format("_api/document/{0}/?returnNew=true", type.Name)
+            };
+
+            var result = await GetResultAsync(payload);
+
+            var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content);
+            return json;
         }
 
         internal async Task<Result> GetResultAsync(Payload payload) {

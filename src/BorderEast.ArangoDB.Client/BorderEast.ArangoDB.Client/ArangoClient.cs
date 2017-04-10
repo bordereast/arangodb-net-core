@@ -28,6 +28,9 @@ namespace BorderEast.ArangoDB.Client
         /// </summary>
         /// <param name="defaultConnection"></param>
         public void SetDefaultDatabase(DatabaseSettings defaultConnection) {
+            if (databases.ContainsKey(DEFAULT)) {
+                return;
+            }
             databases.Add(DEFAULT, defaultConnection);
             pools.Add(DEFAULT, new ConnectionPool<IConnection>(() => new HttpConnection(defaultConnection)));
         }
@@ -38,7 +41,7 @@ namespace BorderEast.ArangoDB.Client
         /// <returns></returns>
         public ArangoDatabase DB() {
             if (!databases.ContainsKey(DEFAULT)) {
-                throw new DatabaseNotFoundException(Res.Msg.ArangoDbNotFound);
+                return null;
             }
             
             return new ArangoDatabase(databases[DEFAULT], pools[DEFAULT]);

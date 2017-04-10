@@ -25,10 +25,10 @@ namespace BorderEast.ArangoDB.ClientTest
         [Fact]
         public void DefaultClientBehavior()
         {
-            // should fail before a call to SetDefaultDatabase
-            Assert.Throws<DatabaseNotFoundException>(() => client.DB()); 
 
-            client.SetDefaultDatabase(settings);
+            if(client.DB() == null) {
+                client.SetDefaultDatabase(settings);
+            }
 
             // should always be available after SetDefaultDatabase
             Assert.NotNull( client.DB()); 

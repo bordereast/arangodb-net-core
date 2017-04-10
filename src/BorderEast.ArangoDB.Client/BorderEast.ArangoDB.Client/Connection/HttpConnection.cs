@@ -50,6 +50,10 @@ namespace BorderEast.ArangoDB.Client.Connection
 
             var responseTask = await client.SendAsync(message);
 
+            if(responseTask.StatusCode == System.Net.HttpStatusCode.NotFound) {
+                return null;
+            }
+
             Result result = new Result()
             {
                 StatusCode = responseTask.StatusCode,
