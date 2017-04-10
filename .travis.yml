@@ -1,5 +1,4 @@
 language: csharp
 solution: BorderEast.ArangoDB.Client.sln
+mono: none
 dotnet: 1.0.1
-install:
-  - nuget restore BorderEast.ArangoDB.Client.sln
