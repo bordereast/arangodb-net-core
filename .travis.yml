@@ -5,6 +5,6 @@ solution: BorderEast.ArangoDB.Client.sln
 mono: none
 dotnet: 1.0.1
 script:
-  - cd /src/BorderEast.ArangoDB.Client/BorderEast.ArangoDB.Client
+  - cd ./src/BorderEast.ArangoDB.Client/BorderEast.ArangoDB.Client
   - dotnet restore
   - dotnet build
