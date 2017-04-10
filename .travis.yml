@@ -3,4 +3,4 @@ sudo: required
 language: csharp
 solution: BorderEast.ArangoDB.Client.sln
 mono: none
-dotnet: 1.0.0-preview2-1-003177
+dotnet: 1.0.1
