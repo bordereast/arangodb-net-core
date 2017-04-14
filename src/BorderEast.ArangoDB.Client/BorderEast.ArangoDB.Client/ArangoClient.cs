@@ -14,7 +14,7 @@ namespace BorderEast.ArangoDB.Client
     {
         private readonly string DEFAULT = Res.Msg.Default;
         private static ArangoClient _client = new ArangoClient();
-        public readonly IDictionary<string, DatabaseSettings> databases = new SortedDictionary<string, DatabaseSettings>();
+        public readonly IDictionary<string, ClientSettings> databases = new SortedDictionary<string, ClientSettings>();
         public readonly IDictionary<string, ConnectionPool<IConnection>> pools = new SortedDictionary<string, ConnectionPool<IConnection>>();
 
         private ArangoClient() { }
@@ -27,7 +27,7 @@ namespace BorderEast.ArangoDB.Client
         /// Setup your default database
         /// </summary>
         /// <param name="defaultConnection"></param>
-        public void SetDefaultDatabase(DatabaseSettings defaultConnection) {
+        public void SetDefaultDatabase(ClientSettings defaultConnection) {
             if (databases.ContainsKey(DEFAULT)) {
                 return;
             }
@@ -64,7 +64,7 @@ namespace BorderEast.ArangoDB.Client
         /// </summary>
         /// <param name="databaseSettings"></param>
         /// <returns></returns>
-        public ArangoDatabase InitDB(DatabaseSettings databaseSettings) {
+        public ArangoDatabase InitDB(ClientSettings databaseSettings) {
             if (databases.ContainsKey(databaseSettings.DatabaseName)) {
                 throw new DatabaseExistsException(Res.Msg.ArangoDbAlreadyExists);
             }

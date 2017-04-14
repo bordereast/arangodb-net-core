@@ -10,9 +10,9 @@ namespace BorderEast.ArangoDB.Client.Connection
     {
         private ConcurrentBag<Connection> _connections;
         private Func<Connection> _objectGenerator;
-        private readonly DatabaseSettings databaseSettings;
+        private readonly ClientSettings databaseSettings;
 
-        public ConnectionPool(DatabaseSettings databaseSettings) {
+        public ConnectionPool(ClientSettings databaseSettings) {
             this.databaseSettings = databaseSettings;
         }
 

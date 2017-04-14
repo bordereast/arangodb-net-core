@@ -49,10 +49,17 @@ namespace BorderEast.ArangoDB.Client.Database
             {
                 Content = JsonConvert.SerializeObject(query),
                 Method = HttpMethod.Post,
-                Path = "/_api/cursor"
+                Path = "_api/cursor"
             };
 
+            if (database.databaseSettings.IsDebug) {
+                payload.Path += "?query=" + Convert.ToBase64String(Encoding.UTF8.GetBytes(query.Query));
+            }
+
             var result = await database.GetResultAsync(payload);
+            if (result == null) {
+                return null;
+            }
 
             var json = JsonConvert.DeserializeObject<AQLResult<T>>(result.Content);
             return json.Result;

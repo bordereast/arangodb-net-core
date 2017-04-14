@@ -13,10 +13,10 @@ namespace BorderEast.ArangoDB.Client.Database
 {
     public class ArangoDatabase
     {
-        private DatabaseSettings databaseSettings;
+        internal ClientSettings databaseSettings;
         private ConnectionPool<IConnection> connectionPool;
 
-        public ArangoDatabase(DatabaseSettings databaseSettings, ConnectionPool<IConnection> connectionPool) {
+        public ArangoDatabase(ClientSettings databaseSettings, ConnectionPool<IConnection> connectionPool) {
             this.databaseSettings = databaseSettings;
             this.connectionPool = connectionPool;
         }
@@ -31,7 +31,6 @@ namespace BorderEast.ArangoDB.Client.Database
         }
 
         private ArangoQuery<T> Query<T>(string query, Dictionary<string, object> parameters) {
-            
             return new ArangoQuery<T>(query, parameters, connectionPool, this);
         }
 
@@ -121,6 +120,8 @@ namespace BorderEast.ArangoDB.Client.Database
             connectionPool.PutConnection(connection);
             return result;
         }
+
+        
 
     }
 }

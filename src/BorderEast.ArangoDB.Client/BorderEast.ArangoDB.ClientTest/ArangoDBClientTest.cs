@@ -9,48 +9,37 @@ namespace BorderEast.ArangoDB.ClientTest
     
     public class ArangoDBClientTest  {
 
-        private ArangoClient client = ArangoClient.Client();
-        private DatabaseSettings settings = new DatabaseSettings()
-        {
-            DatabaseName = "_system",
-            Protocol = ProtocolType.HTTP,
-            ServerAddress = "localhost",
-            ServerPort = 8529,
-            SystemCredential = new System.Net.NetworkCredential("root", Environment.GetEnvironmentVariable("USERNAME")),
-            DatabaseCredential = new System.Net.NetworkCredential("client-test", "client-test"),
-            AutoCreate = true
-        };
+        
+        //[Fact]
+        //public void DefaultClientBehavior()
+        //{
+        //    var client = MockData.MockSetup.GetClient();
+            
+        //    if(client.DB() == null) {
+        //        client.SetDefaultDatabase(settings);
+        //    }
 
+        //    // should always be available after SetDefaultDatabase
+        //    Assert.NotNull( client.DB()); 
 
-        [Fact]
-        public void DefaultClientBehavior()
-        {
+        //    settings.DatabaseName = "default";
 
-            if(client.DB() == null) {
-                client.SetDefaultDatabase(settings);
-            }
+        //    // never more than one default database
+        //    Assert.Throws<DatabaseExistsException>(() => client.InitDB(settings)); 
 
-            // should always be available after SetDefaultDatabase
-            Assert.NotNull( client.DB()); 
+        //    // reset for other tests
+        //    settings.DatabaseName = "_system";
+        //}
 
-            settings.DatabaseName = "default";
+        //[Fact]
+        //public void CreateDatabase() {
+        //    settings.DatabaseName = "new";
 
-            // never more than one default database
-            Assert.Throws<DatabaseExistsException>(() => client.InitDB(settings)); 
+        //    // non-existant database should be created and returned
+        //    Assert.IsType<ArangoDatabase>(client.InitDB(settings));
 
-            // reset for other tests
-            settings.DatabaseName = "_system";
-        }
-
-        [Fact]
-        public void CreateDatabase() {
-            settings.DatabaseName = "new";
-
-            // non-existant database should be created and returned
-            Assert.IsType<ArangoDatabase>(client.InitDB(settings));
-
-            // reset for other tests
-            settings.DatabaseName = "_system"; 
-        }
+        //    // reset for other tests
+        //    settings.DatabaseName = "_system"; 
+        //}
     }
 }

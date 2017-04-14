@@ -10,10 +10,17 @@ namespace BorderEast.ArangoDB.Client.Connection
 {
     public class HttpConnection : IConnection
     {
-        private HttpClient client = new HttpClient();
-        private DatabaseSettings databaseSettings;
+        private HttpClient client;
+        private ClientSettings databaseSettings;
 
-        public HttpConnection(DatabaseSettings databaseSettings) {
+        public HttpConnection(ClientSettings databaseSettings) {
+
+            if(databaseSettings.HTTPClient != null) {
+                client = databaseSettings.HTTPClient;
+            } else {
+                client = new HttpClient();
+            }
+
             this.databaseSettings = databaseSettings;
 
             bool isSystem = databaseSettings.DatabaseName == "_system";

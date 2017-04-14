@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace BorderEast.ArangoDB.Client.Database
 {
-    public class DatabaseSettings {
+    public class ClientSettings {
 
-        public DatabaseSettings() { }
+        public ClientSettings() { }
 
-        public DatabaseSettings(string serverAddress, int serverPort, ProtocolType protocolType, 
-            string systemPassword, string databaseName, string databaseUsername, string databasePassword, bool autoCreate) 
+        public ClientSettings(string serverAddress, int serverPort, ProtocolType protocolType, 
+            string systemPassword, string databaseName, string databaseUsername, string databasePassword, bool autoCreate, bool isDebug = false) 
         {
             ServerAddress = serverAddress;
             ServerPort = serverPort;
@@ -19,6 +20,7 @@ namespace BorderEast.ArangoDB.Client.Database
             SystemCredential = new NetworkCredential("root", systemPassword);
             DatabaseCredential = new NetworkCredential(databaseUsername, databasePassword);
             AutoCreate = autoCreate;
+            IsDebug = isDebug;
         }
 
         public string ServerAddress { get; set; }
@@ -27,6 +29,8 @@ namespace BorderEast.ArangoDB.Client.Database
 
         public ProtocolType Protocol { get; set; }
 
+        public HttpClient HTTPClient { get; set; }
+
         public string DatabaseName { get; set; }
 
         public NetworkCredential SystemCredential { get; set; }
@@ -34,5 +38,7 @@ namespace BorderEast.ArangoDB.Client.Database
         public NetworkCredential DatabaseCredential { get; set; }
 
         public bool AutoCreate { get; set; }
+
+        public bool IsDebug { get; set; }
     }
 }
