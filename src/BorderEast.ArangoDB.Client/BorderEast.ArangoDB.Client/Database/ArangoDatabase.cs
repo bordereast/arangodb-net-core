@@ -54,14 +54,16 @@ namespace BorderEast.ArangoDB.Client.Database
         }
 
         public async Task<List<T>> GetAll<T>(AllResultType type = AllResultType.Full) {
+            var d = new Dictionary<string, object>();
+            d.Add("@col", typeof(T).Name);
             switch (type) {
                 case AllResultType.Id:
-                    return await Query<T>(string.Format("for x in {0} return x._id", typeof(T).Name), null).ToList();
+                    return await Query<T>("for x in @@col return x._id", d).ToList();
                 case AllResultType.Key:
-                    return await Query<T>(string.Format("for x in {0} return x._key", typeof(T).Name), null).ToList();
+                    return await Query<T>("for x in @@col return x._key", d).ToList();
                 case AllResultType.Full:
                 default:
-                    return await Query<T>(string.Format("for x in {0} return x", typeof(T).Name), null).ToList();
+                    return await Query<T>("for x in @@col return x", d).ToList();
             }
             
         }
