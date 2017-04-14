@@ -10,7 +10,6 @@ namespace BorderEast.ArangoDB.ClientTest.MockData
 {
     public  class MockSetup
     {
-        private static MockSetup setup = new MockSetup();
         public MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
         public ArangoClient client = ArangoClient.Client();
         public ClientSettings settings = new ClientSettings()
@@ -27,7 +26,8 @@ namespace BorderEast.ArangoDB.ClientTest.MockData
         };
 
         public static ArangoClient GetClient() {
-            if(setup.settings.HTTPClient == null) {
+            MockSetup setup = new MockSetup();
+            if (setup.settings.HTTPClient == null) {
                 setup.SetupRoutes(setup.mockHttp);
                 setup.settings.HTTPClient = new System.Net.Http.HttpClient(setup.mockHttp);
                 setup.client.SetDefaultDatabase(setup.settings);
