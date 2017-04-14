@@ -9,4 +9,6 @@ script:
   - dotnet restore
   - dotnet build
   - cd ../BorderEast.ArangoDB.ClientTest
+  - dotnet restore
+  - dotnet build
   - dotnet test
