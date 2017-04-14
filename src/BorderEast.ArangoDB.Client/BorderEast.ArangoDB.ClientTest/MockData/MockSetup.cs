@@ -54,8 +54,14 @@ namespace BorderEast.ArangoDB.ClientTest.MockData
             m.When(HttpMethod.Post, "*/_api/cursor?query=Zm9yIHUgaW4gVXNlciByZXR1cm4gdQ==").
                 Respond("application/json", "{\"result\":[{\"_id\":\"User/1312460\",\"_key\":\"1312460\",\"_rev\":\"_U0xbgLu---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1314279\",\"_key\":\"1314279\",\"_rev\":\"_U0x1-he---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1313287\",\"_key\":\"1313287\",\"_rev\":\"_U0xnhJO---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1313328\",\"_key\":\"1313328\",\"_rev\":\"_U0xo_h2---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"}],\"hasMore\":false,\"cached\":false,\"extra\":{\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"scannedFull\":4,\"scannedIndex\":0,\"filtered\":0,\"executionTime\":9.999275207519531e-4},\"warnings\":[]},\"error\":false,\"code\":201}");
 
-            m.When(HttpMethod.Post, "*/_api/cursor").
+            m.When(HttpMethod.Post, "*/_api/cursor?query=Zm9yIHggaW4gQEBjb2wgcmV0dXJuIHg=").
+                Respond("application/json", "{\"result\":[{\"_id\":\"User/6489\",\"_key\":\"6489\",\"_rev\":\"_U02b8YG---\"},{\"_id\":\"User/6503\",\"_key\":\"6503\",\"_rev\":\"_U02cCh6---\"}],\"hasMore\":false,\"cached\":true,\"extra\":{},\"error\":false,\"code\":201}");
+
+            m.When(HttpMethod.Post, "*/_api/cursor?query=Zm9yIHggaW4gQEBjb2wgcmV0dXJuIHguX2tleQ==").
                 Respond("application/json", "{\"result\":[{\"_id\":\"User/1312460\",\"_key\":\"1312460\",\"_rev\":\"_U0xbgLu---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1314279\",\"_key\":\"1314279\",\"_rev\":\"_U0x1-he---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1313287\",\"_key\":\"1313287\",\"_rev\":\"_U0xnhJO---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1313328\",\"_key\":\"1313328\",\"_rev\":\"_U0xo_h2---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"}],\"hasMore\":false,\"cached\":false,\"extra\":{\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"scannedFull\":4,\"scannedIndex\":0,\"filtered\":0,\"executionTime\":9.999275207519531e-4},\"warnings\":[]},\"error\":false,\"code\":201}");
+
+            m.When(HttpMethod.Post, "*/_api/cursor").
+                Respond("application/json", "{\"result\":[\"6489\",\"6503\"],\"hasMore\":false,\"cached\":false,\"extra\":{\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"scannedFull\":2,\"scannedIndex\":0,\"filtered\":0,\"executionTime\":0},\"warnings\":[]},\"error\":false,\"code\":201}");
 
 
         }
