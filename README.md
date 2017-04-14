@@ -27,6 +27,8 @@ GetByKeyAsync | Done
 UpdateAsync | Done
 DeleteAsync | Done
 InsertAsync | Done
+GetAllAsync | Done
+GetAllKeysAsync | Done
 
 ### Credits
 Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclient.net) and [yojimbo87](https://github.com/yojimbo87/ArangoDB-NET), this is a .NETCoreApp1.1 version.
