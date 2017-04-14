@@ -39,8 +39,8 @@ namespace ConsoleTestApp {
             //var json = JsonConvert.SerializeObject(databases);
 
             var client = ArangoClient.Client();
-            var users = client.DB().GetAll<User>().Result;
-            var users2 = client.DB().GetAllKeys<User>().Result;
+            var users = client.DB().GetAllAsync<User>().Result;
+            var users2 = client.DB().GetAllKeysAsync<User>().Result;
 
             // var result = client.DB().InsertAsync<User>(juser);
             //var user = client.DB().Query<User>("for u in User return u").ToList().Result.First();

@@ -53,12 +53,12 @@ namespace BorderEast.ArangoDB.Client.Database
             return json;
         }
 
-        public async Task<List<T>> GetAll<T>() {
+        public async Task<List<T>> GetAllAsync<T>() {
             return await Query<T>("for x in @@col return x", 
                 new Dictionary<string, object>{{ "@col", typeof(T).Name }}).ToList();
         }
 
-        public async Task<List<string>> GetAllKeys<T>() {
+        public async Task<List<string>> GetAllKeysAsync<T>() {
             return await Query<string>("for x in @@col return x._key",
                 new Dictionary<string, object> { { "@col", typeof(T).Name } }).ToList();
         }

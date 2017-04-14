@@ -28,13 +28,13 @@ namespace BorderEast.ArangoDB.ClientTest
         [Fact]
         public void GetAll() {
             var client = MockSetup.GetClient();
-            var users = client.DB().GetAll<User>().Result;
+            var users = client.DB().GetAllAsync<User>().Result;
             Assert.Equal(2, users.Count());
         }
 
         public void GetAllKeys() {
             var client = MockSetup.GetClient();
-            var users = client.DB().GetAllKeys<User>().Result;
+            var users = client.DB().GetAllKeysAsync<User>().Result;
             Assert.Equal(2, users.Count());
         }
 
