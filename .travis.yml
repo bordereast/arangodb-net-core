@@ -8,3 +8,5 @@ script:
   - cd ./src/BorderEast.ArangoDB.Client/BorderEast.ArangoDB.Client
   - dotnet restore
   - dotnet build
+  - cd ../BorderEast.ArangoDB.ClientTest
+  - dotnet test
