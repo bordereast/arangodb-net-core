@@ -53,6 +53,19 @@ namespace BorderEast.ArangoDB.Client.Database
             return json;
         }
 
+        public async Task<List<T>> GetAll<T>(AllResultType type = AllResultType.Full) {
+            switch (type) {
+                case AllResultType.Id:
+                    return await Query<T>(string.Format("for x in {0} return x._id", typeof(T).Name), null).ToList();
+                case AllResultType.Key:
+                    return await Query<T>(string.Format("for x in {0} return x._key", typeof(T).Name), null).ToList();
+                case AllResultType.Full:
+                default:
+                    return await Query<T>(string.Format("for x in {0} return x", typeof(T).Name), null).ToList();
+            }
+            
+        }
+
         public async Task<UpdatedDocument<T>> UpdateAsync<T>(string key, T item) {
             Type type = typeof(T);
 

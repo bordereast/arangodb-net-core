@@ -29,27 +29,22 @@ namespace BorderEast.ArangoDB.Client.Connection
                 "://" + databaseSettings.ServerAddress + ":" + databaseSettings.ServerPort + "/" 
                 + (isSystem ? string.Empty : string.Format("_db/{0}/", databaseSettings.DatabaseName)));
 
-            
-            
         }
 
-        private void AddHeaders() {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Clear();
+        private void AddHeaders(HttpRequestMessage message) {
+            message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             if (databaseSettings.DatabaseCredential != null) {
-                client.DefaultRequestHeaders.Add(
+                message.Headers.Add(
                     "Authorization",
                     "Basic " + Convert.ToBase64String(
                         Encoding.UTF8.GetBytes(databaseSettings.DatabaseCredential.UserName + ":" + databaseSettings.DatabaseCredential.Password)));
             }
         }
-
-
+        
         public async Task<Result> GetAsync(Payload payload) {
-            AddHeaders();
-
             var message = new HttpRequestMessage(payload.Method, client.BaseAddress + payload.Path);
+
+            AddHeaders(message);
 
             if (!string.IsNullOrEmpty(payload.Content)) {
                 message.Content = new StringContent(payload.Content, Encoding.UTF8, "application/json");

@@ -14,8 +14,8 @@ namespace BorderEast.ArangoDB.Client
     {
         private readonly string DEFAULT = Res.Msg.Default;
         private static ArangoClient _client = new ArangoClient();
-        public readonly IDictionary<string, ClientSettings> databases = new SortedDictionary<string, ClientSettings>();
-        public readonly IDictionary<string, ConnectionPool<IConnection>> pools = new SortedDictionary<string, ConnectionPool<IConnection>>();
+        internal readonly IDictionary<string, ClientSettings> databases = new SortedDictionary<string, ClientSettings>();
+        internal readonly IDictionary<string, ConnectionPool<IConnection>> pools = new SortedDictionary<string, ConnectionPool<IConnection>>();
 
         private ArangoClient() { }
 
