@@ -9,7 +9,7 @@ Contributions welcome, follow code style.
 For those who like to write pure AQL queries for ultimate flexibility. This will mainly focus on AQL string queries at first with convience methods for Insert, Update, Delete etc.
 
 ### Managed Foreign Keys
-Currently working on a managed foreign key feature. This will allow an entity to include another entity with a data annotation describing the foreign key. This will produce two tables in the database but allow users to work the entity as if it was a single document. Understanding that this is duplicating some relational database features, this is the most common feature lacking in client libraries.
+This client supports managed foreign key feature. This will allow an entity to include another entity with a data annotation describing the foreign key. This will work with two tables in the database but allow users to work the entity as if it was a single document. Understanding that this is duplicating some relational database features, this is the most common feature lacking in client libraries.
 
 ArangoDB has an excellent join feature via AQL, and this is the next logical step on the client side.
 
