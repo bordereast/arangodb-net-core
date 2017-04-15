@@ -21,7 +21,7 @@ Document Update (PATCH) now returns the Arango old revision and new document. Wi
 
 ### Feature Status
 Method | Status | Foreign Key Support
---- | --- 
+--- | --- | ---
 AQL Query | Done | Manual
 GetByKeyAsync | Done | Auto
 UpdateAsync | Done | Auto
