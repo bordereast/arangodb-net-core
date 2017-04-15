@@ -30,7 +30,6 @@ namespace BorderEast.ArangoDB.Client.Database
                 foreach (var na in attr.NamedArguments) {
                     var x = na.MemberName;
                     var y = na.TypedValue.Value;
-                    var s = "";
                 }
             }
             JObject o = (JObject)t;

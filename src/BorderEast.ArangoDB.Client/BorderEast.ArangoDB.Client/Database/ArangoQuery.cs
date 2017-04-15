@@ -38,12 +38,19 @@ namespace BorderEast.ArangoDB.Client.Database
             };
         }
 
+        public ArangoQuery(AQLQuery aqlQuery, ConnectionPool<IConnection> connectionPool, ArangoDatabase database) {
+            this.connectionPool = connectionPool;
+            this.database = database;
+            query = aqlQuery;
+        }
+
+
         public ArangoQuery<T> WithParameters(Dictionary<string, object> parameters) {
             this.query.Parameters = parameters;
             return this;
         }
 
-        public async Task<List<T>> ToList() {
+        public async Task<List<T>> ToListAsync() {
             
             Payload payload = new Payload()
             {

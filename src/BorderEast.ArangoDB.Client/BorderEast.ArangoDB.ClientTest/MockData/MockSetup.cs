@@ -30,7 +30,9 @@ namespace BorderEast.ArangoDB.ClientTest.MockData
             if (setup.settings.HTTPClient == null) {
                 setup.SetupRoutes(setup.mockHttp);
                 setup.settings.HTTPClient = new System.Net.Http.HttpClient(setup.mockHttp);
-                setup.client.SetDefaultDatabase(setup.settings);
+                if(setup.client.DB() == null) {
+                    setup.client.SetDefaultDatabase(setup.settings);
+                }
             }
             return setup.client;
         }

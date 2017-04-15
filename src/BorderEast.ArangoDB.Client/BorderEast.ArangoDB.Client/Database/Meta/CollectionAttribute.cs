@@ -7,8 +7,6 @@ namespace BorderEast.ArangoDB.Client.Database.Meta
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class CollectionAttribute : Attribute, ICollectionAttribute {
 
-        public string Name { get; set; }
-
-        public NamingConvention NamingType { get; set; }
+        public Boolean HasForeignKey { get; set; }
     }
 }

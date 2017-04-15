@@ -23,12 +23,14 @@ namespace ConsoleTestApp {
                 IsDebug = true
             });
 
-            var juser = new User()
-            {
-                Username = "andrew",
-                Password = "passcode"
-            };
+            var client = ArangoClient.Client();
 
+            var user = client.DB().GetByKeyAsync<User>("23773").Result;
+
+            var users = client.DB().GetAllAsync<User>().Result;
+
+
+            //var u1 = client.DB().InsertAsync<User>(juser).Result;
             //var token = JsonConvert.SerializeObject(juser, Formatting.Indented, new ArangoJsonConverter(typeof(User)));
 
             //Dictionary<string, object> databases = new Dictionary<string, object>
@@ -38,9 +40,9 @@ namespace ConsoleTestApp {
             //};
             //var json = JsonConvert.SerializeObject(databases);
 
-            var client = ArangoClient.Client();
-            var users = client.DB().GetAllAsync<User>().Result;
-            var users2 = client.DB().GetAllKeysAsync<User>().Result;
+
+            //var users = client.DB().GetAllAsync<User>().Result;
+            //var users2 = client.DB().GetAllKeysAsync<User>().Result;
 
             // var result = client.DB().InsertAsync<User>(juser);
             //var user = client.DB().Query<User>("for u in User return u").ToList().Result.First();
