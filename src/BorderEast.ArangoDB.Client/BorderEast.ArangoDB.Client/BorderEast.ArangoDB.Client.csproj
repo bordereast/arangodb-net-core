@@ -2,6 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PackageId>BorderEast.ArangoDB.Client</PackageId>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Authors>Border East</Authors>
+    <Description>DotNet Core ArangoDB Client</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>alpha release</PackageReleaseNotes>
+    <Copyright>Copyright 2017 (c) Border East. All rights reserved.</Copyright>
+    <PackageTags>arangodb database-client netcore</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp1.1\BorderEast.ArangoDB.Client.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <ItemGroup>

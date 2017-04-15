@@ -10,14 +10,18 @@ using System.Linq;
 
 namespace BorderEast.ArangoDB.Client.Database
 {
-
+    /// <summary>
+    /// Strongy typed query builder
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ArangoQuery<T>
     {
         private AQLQuery query;
         private ConnectionPool<IConnection> connectionPool;
         private ArangoDatabase database;
 
-        public ArangoQuery(string queryStr, ConnectionPool<IConnection> connectionPool, ArangoDatabase database) {
+
+        internal ArangoQuery(string queryStr, ConnectionPool<IConnection> connectionPool, ArangoDatabase database) {
             this.connectionPool = connectionPool;
             this.database = database;
             query = new AQLQuery()
@@ -26,7 +30,7 @@ namespace BorderEast.ArangoDB.Client.Database
             };
         }
 
-        public ArangoQuery(string queryStr, Dictionary<string, object> parameters, 
+        internal ArangoQuery(string queryStr, Dictionary<string, object> parameters, 
             ConnectionPool<IConnection> connectionPool, ArangoDatabase database) 
         {
             this.connectionPool = connectionPool;
@@ -38,18 +42,26 @@ namespace BorderEast.ArangoDB.Client.Database
             };
         }
 
-        public ArangoQuery(AQLQuery aqlQuery, ConnectionPool<IConnection> connectionPool, ArangoDatabase database) {
+        internal ArangoQuery(AQLQuery aqlQuery, ConnectionPool<IConnection> connectionPool, ArangoDatabase database) {
             this.connectionPool = connectionPool;
             this.database = database;
             query = aqlQuery;
         }
 
-
+        /// <summary>
+        /// Add parameters to the query
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public ArangoQuery<T> WithParameters(Dictionary<string, object> parameters) {
             this.query.Parameters = parameters;
             return this;
         }
 
+        /// <summary>
+        /// Retrieve as List
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<T>> ToListAsync() {
             
             Payload payload = new Payload()

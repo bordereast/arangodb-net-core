@@ -15,20 +15,41 @@ using BorderEast.ArangoDB.Client.Database.AQLCursor;
 
 namespace BorderEast.ArangoDB.Client.Database
 {
+    /// <summary>
+    /// Public methods for interacting with ArangoDB
+    /// </summary>
     public class ArangoDatabase
     {
         internal ClientSettings databaseSettings;
         private ConnectionPool<IConnection> connectionPool;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="databaseSettings"></param>
+        /// <param name="connectionPool"></param>
         public ArangoDatabase(ClientSettings databaseSettings, ConnectionPool<IConnection> connectionPool) {
             this.databaseSettings = databaseSettings;
             this.connectionPool = connectionPool;
         }
 
+        /// <summary>
+        /// Ad hoc AQL query that will be serialized to give type T
+        /// </summary>
+        /// <typeparam name="T">Entity class</typeparam>
+        /// <param name="query">AQL query text</param>
+        /// <returns>ArangoQuery of T</returns>
         public ArangoQuery<T> Query<T>(string query) {
             return Query<T>(query, null);
         }
 
+        /// <summary>
+        /// Ad hoc AQL query that will be serialized to give type T
+        /// </summary>
+        /// <typeparam name="T">Entity class</typeparam>
+        /// <param name="query">AQL query text</param>
+        /// <param name="parameters">Dynamic object of parmeters, use JSON names (_key instead of Key)</param>
+        /// <returns>ArangoQuery of T</returns>
         public ArangoQuery<T> Query<T>(string query, dynamic parameters) {
             Dictionary<string, object> dParams = DynamicUtil.DynamicToDict(parameters);
             return Query<T>(query, dParams);
@@ -42,17 +63,27 @@ namespace BorderEast.ArangoDB.Client.Database
             return new ArangoQuery<T>(query, connectionPool, this);
         }
 
+        /// <summary>
+        /// Get entities by example
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <param name="parameters">Dynamic object of parmeters, use JSON names (_key instead of Key)</param>
+        /// <returns>List of entities</returns>
         public async Task<List<T>> GetByExampleAsync<T>(dynamic parameters) {
             Type type = typeof(T);
-
             ForeignKey fk = HasForeignKey(type);
 
             var q = BuildFKQuery(fk, type, parameters);
-
             return await Query<T>(q).ToListAsync();
 
         }
 
+        /// <summary>
+        /// Get entity by key
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <param name="key">Key of entity</param>
+        /// <returns>Single entity</returns>
         public async Task<T> GetByKeyAsync<T>(string key) {
             Type type = typeof(T);
 
@@ -81,7 +112,11 @@ namespace BorderEast.ArangoDB.Client.Database
             return json;
         }
 
-        
+        /// <summary>
+        /// Get all entities of given type
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <returns>List of entities</returns>
         public async Task<List<T>> GetAllAsync<T>() {
             Type t = typeof(T);
 
@@ -178,11 +213,23 @@ namespace BorderEast.ArangoDB.Client.Database
             return fk;
         }
 
+        /// <summary>
+        /// Get all keys of a given entity
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <returns>List of entity keys</returns>
         public async Task<List<string>> GetAllKeysAsync<T>() {
             return await Query<string>("for x in @@col return x._key",
                 new Dictionary<string, object> { { "@col", typeof(T).Name } }).ToListAsync();
         }
 
+        /// <summary>
+        /// Update an entity
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <param name="key">Key of entity</param>
+        /// <param name="item">Entity with all or partial properties</param>
+        /// <returns>UpdatedDocument with complete new Entity</returns>
         public async Task<UpdatedDocument<T>> UpdateAsync<T>(string key, T item) {
             Type type = typeof(T);
 
@@ -201,6 +248,12 @@ namespace BorderEast.ArangoDB.Client.Database
             return json;
         }
 
+        /// <summary>
+        /// Delete an entity
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <param name="key">Entity key</param>
+        /// <returns>True for success, false on error</returns>
         public async Task<bool> DeleteAsync<T>(string key) {
             Type type = typeof(T);
             
@@ -223,6 +276,12 @@ namespace BorderEast.ArangoDB.Client.Database
                 
         }
 
+        /// <summary>
+        /// Insert entity
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <param name="item">Entity to insert</param>
+        /// <returns>UpdatedDocument with new entity</returns>
         public async Task<UpdatedDocument<T>> InsertAsync<T>(T item) {
             Type type = typeof(T);
 
