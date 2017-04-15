@@ -30,14 +30,6 @@ namespace BorderEast.ArangoDB.Client.Database
         }
 
         public ArangoQuery<T> Query<T>(string query, dynamic parameters) {
-            ForeignKey fk = HasForeignKey(typeof(T));
-
-            if (fk.IsForeignKey) {
-                var q = BuildFKQuery(fk, typeof(T), parameters);
-
-                return Query<T>(q);
-            }
-
             Dictionary<string, object> dParams = DynamicUtil.DynamicToDict(parameters);
             return Query<T>(query, dParams);
         }
@@ -48,6 +40,17 @@ namespace BorderEast.ArangoDB.Client.Database
 
         private ArangoQuery<T> Query<T>(AQLQuery query) {
             return new ArangoQuery<T>(query, connectionPool, this);
+        }
+
+        public async Task<List<T>> GetByExampleAsync<T>(dynamic parameters) {
+            Type type = typeof(T);
+
+            ForeignKey fk = HasForeignKey(type);
+
+            var q = BuildFKQuery(fk, type, parameters);
+
+            return await Query<T>(q).ToListAsync();
+
         }
 
         public async Task<T> GetByKeyAsync<T>(string key) {
@@ -105,13 +108,15 @@ namespace BorderEast.ArangoDB.Client.Database
             
 
             sb.Append("for x1 in  " + baseType.Name);
-           // parms.Add("@col", baseType.Name);
+            // parms.Add("@col", baseType.Name);
 
-            for(var i = 0; i < fk.ForeignKeyTypes.Count; i++) {
-                sb.AppendFormat(" LET {0} = ( for x in x1.{1} for {0} in {2} FILTER x == {0}._key return {0}) ", 
-                    "a" + i, // {0}
-                    fk.ForeignKeyTypes[i].Key,  // {1}
-                    fk.ForeignKeyTypes[i].Value.Name);  // {2}
+            if (fk.IsForeignKey) {
+                for (var i = 0; i < fk.ForeignKeyTypes.Count; i++) {
+                    sb.AppendFormat(" LET {0} = ( for x in x1.{1} for {0} in {2} FILTER x == {0}._key return {0}) ",
+                        "a" + i, // {0}
+                        fk.ForeignKeyTypes[i].Key,  // {1}
+                        fk.ForeignKeyTypes[i].Value.Name);  // {2}
+                }
             }
 
             // check for parameters
@@ -123,19 +128,23 @@ namespace BorderEast.ArangoDB.Client.Database
                 }
             }
 
-            sb.Append(" return merge (x1, {");
+            if (fk.IsForeignKey) {
+                sb.Append(" return merge (x1, {");
 
-            for (var i = 0; i < fk.ForeignKeyTypes.Count; i++) {
-                if(i>0) {
-                    sb.Append(", ");
+                for (var i = 0; i < fk.ForeignKeyTypes.Count; i++) {
+                    if (i > 0) {
+                        sb.Append(", ");
+                    }
+
+                    sb.AppendFormat("{1}: {0}", // Roles: a1
+                        "a" + i, // {0}
+                        fk.ForeignKeyTypes[i].Key);  // {2}
                 }
 
-                sb.AppendFormat("{1}: {0}", // Roles: a1
-                    "a" + i, // {0}
-                    fk.ForeignKeyTypes[i].Key);  // {2}
+                sb.Append(" }) ");
+            } else {
+                sb.Append(" return x1 ");
             }
-
-            sb.Append(" }) ");
 
             q.Query = sb.ToString();
 

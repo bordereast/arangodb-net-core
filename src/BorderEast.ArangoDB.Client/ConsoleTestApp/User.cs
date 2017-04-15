@@ -12,17 +12,14 @@ namespace ConsoleTestApp
     public class User : ArangoBaseEntity
     {
         [JsonProperty(PropertyName = "userName", NullValueHandling = NullValueHandling.Ignore)]
-        [ArangoField(Field = ArangoField.Id, Name = "userName", NamingType = NamingConvention.UnChanged)]
         public string Username { get; set; }
 
         [JsonProperty(PropertyName = "passwd", NullValueHandling = NullValueHandling.Ignore)]
-        [ArangoField(Field = ArangoField.Id, Name = "passwd", NamingType = NamingConvention.UnChanged)]
         public string Password { get; set; }
 
         [ArangoField(ForeignKeyTo = "Role")]
         [JsonConverter(typeof(ForeignKeyConverter))]
         public List<Role> Roles { get; set; }
-
         
     }
 }
