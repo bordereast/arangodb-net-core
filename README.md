@@ -11,7 +11,7 @@ For those who like to write pure AQL queries for ultimate flexibility. This will
 ### Managed Foreign Keys
 This client supports managed foreign key feature. This will allow an entity to include another entity with a data annotation describing the foreign key. This will work with two tables in the database but allow users to work the entity as if it was a single document. Understanding that this is duplicating some relational database features, this is the most common feature lacking in client libraries.
 
-ArangoDB has an excellent join feature via AQL, and this is the next logical step on the client side.
+ArangoDB has an excellent join feature via AQL, and this is the next logical step on the client side. [Please see the documentation for examples](https://github.com/bordereast/arangodb-net-core/wiki)
 
 ### Connection Pools
 This client manages connection pools. It has two connection pools, one for HTTP and one for VelocyStream(not implemented yet). All methods are Async and a connection is obtained immediatly before use and released immediatly afterwards. This is handled internally, so consumers won't need to worry about closing connections. Also, each HTTPClient object is left undisposed, but only used by one Database instance at a time. This cuts down on overhead of new connections but makes connection use consistent between the HTTP and yet to be implemented TCP protocols.
