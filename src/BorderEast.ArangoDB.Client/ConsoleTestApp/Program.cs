@@ -25,19 +25,19 @@ namespace ConsoleTestApp {
 
             var client = ArangoClient.Client();
 
-            Role r = new Role()
-            {
-                Name = "sysadmin",
-                Permission = "RW"
-            };
-            Role r2 = new Role()
-            {
-                Name = "author",
-                Permission = "RW"
-            };
+            //Role r = new Role()
+            //{
+            //    Name = "sysadmin",
+            //    Permission = "RW"
+            //};
+            //Role r2 = new Role()
+            //{
+            //    Name = "author",
+            //    Permission = "RW"
+            //};
 
-            var uR1 = client.DB().InsertAsync<Role>(r).Result;
-            var uR2 = client.DB().InsertAsync<Role>(r2).Result;
+            //var uR1 = client.DB().InsertAsync<Role>(r).Result;
+            //var uR2 = client.DB().InsertAsync<Role>(r2).Result;
 
 
 
@@ -45,8 +45,8 @@ namespace ConsoleTestApp {
             var juser = new User()
             {
                 Username = "andrew",
-                Password = "passcode",
-                Roles = new List<Role>() { uR1.New, uR2.New}
+                Password = "passcode"//,
+                //Roles = new List<Role>() { uR1.New, uR2.New}
             };
 
 
@@ -58,10 +58,11 @@ namespace ConsoleTestApp {
 
             string json = JsonConvert.SerializeObject(juser);
 
-            var u1 = client.DB().InsertAsync<Role>(r2).Result;
-            var users = client.DB().GetAllAsync<User>();
+            var s = json;
+            //var u1 = client.DB().InsertAsync<Role>(r2).Result;
+            //var users = client.DB().GetAllAsync<User>();
 
-            var u = client.DB().GetByKeyAsync<User>("");
+            //var u = client.DB().GetByKeyAsync<User>("");
 
             //var token = JsonConvert.SerializeObject(juser, Formatting.Indented, new ArangoJsonConverter(typeof(User)));
 

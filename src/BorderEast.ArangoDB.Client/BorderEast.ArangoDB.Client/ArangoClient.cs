@@ -10,8 +10,7 @@ namespace BorderEast.ArangoDB.Client
     /// Entry point for interacting with ArangoDB. You only need one instance of this class, 
     /// even if working with multiple databases, hence the Singleton pattern.
     /// </summary>
-    public class ArangoClient
-    {
+    public class ArangoClient : IArangoClient {
         private readonly string DEFAULT = Res.Msg.Default;
         private static ArangoClient _client = new ArangoClient();
         internal readonly IDictionary<string, ClientSettings> databases = new SortedDictionary<string, ClientSettings>();
@@ -19,6 +18,10 @@ namespace BorderEast.ArangoDB.Client
 
         private ArangoClient() { }
 
+        /// <summary>
+        /// Get the client instance
+        /// </summary>
+        /// <returns></returns>
         public static ArangoClient Client() {
             return _client;
         }

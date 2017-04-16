@@ -86,6 +86,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <returns>Single entity</returns>
         public async Task<T> GetByKeyAsync<T>(string key) {
             Type type = typeof(T);
+            var typeName = GetTypeName(type);
 
             ForeignKey fk = HasForeignKey(type);
 
@@ -99,7 +100,7 @@ namespace BorderEast.ArangoDB.Client.Database
             Payload payload = new Payload() {
                 Content = string.Empty,
                 Method = HttpMethod.Get,
-                Path = string.Format("_api/document/{0}/{1}", type.Name, key)
+                Path = string.Format("_api/document/{0}/{1}", typeName, key)
             };
             
             var result = await GetResultAsync(payload);
@@ -118,18 +119,18 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <typeparam name="T">Entity type</typeparam>
         /// <returns>List of entities</returns>
         public async Task<List<T>> GetAllAsync<T>() {
-            Type t = typeof(T);
+            var typeName = GetTypeName(typeof(T));
 
-            ForeignKey fk = HasForeignKey(t);
+            ForeignKey fk = HasForeignKey(typeof(T));
 
             if (fk.IsForeignKey) {
-                var q = BuildFKQuery(fk, t);
+                var q = BuildFKQuery(fk, typeof(T));
 
                 return await Query<T>(q).ToListAsync();
             }
 
             return await Query<T>("for x in @@col return x", 
-                new Dictionary<string, object>{{ "@col", typeof(T).Name }}).ToListAsync();
+                new Dictionary<string, object>{{ "@col", typeName }}).ToListAsync();
         }
 
         private AQLQuery BuildFKQuery(ForeignKey fk, Type baseType, dynamic parameters = null) {
@@ -142,7 +143,7 @@ namespace BorderEast.ArangoDB.Client.Database
             }
             
 
-            sb.Append("for x1 in  " + baseType.Name);
+            sb.Append("for x1 in  " + GetTypeName(baseType));
             // parms.Add("@col", baseType.Name);
 
             if (fk.IsForeignKey) {
@@ -220,7 +221,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <returns>List of entity keys</returns>
         public async Task<List<string>> GetAllKeysAsync<T>() {
             return await Query<string>("for x in @@col return x._key",
-                new Dictionary<string, object> { { "@col", typeof(T).Name } }).ToListAsync();
+                new Dictionary<string, object> { { "@col", GetTypeName(typeof(T)) } }).ToListAsync();
         }
 
         /// <summary>
@@ -231,7 +232,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="item">Entity with all or partial properties</param>
         /// <returns>UpdatedDocument with complete new Entity</returns>
         public async Task<UpdatedDocument<T>> UpdateAsync<T>(string key, T item) {
-            Type type = typeof(T);
+            var typeName = GetTypeName(typeof(T));
 
             HttpMethod method = new HttpMethod("PATCH");
 
@@ -239,7 +240,7 @@ namespace BorderEast.ArangoDB.Client.Database
             {
                 Content = JsonConvert.SerializeObject(item),
                 Method = method,
-                Path = string.Format("_api/document/{0}/{1}?mergeObjects=false&returnNew=true", type.Name, key)
+                Path = string.Format("_api/document/{0}/{1}?mergeObjects=false&returnNew=true", typeName, key)
             };
 
             var result = await GetResultAsync(payload);
@@ -255,13 +256,13 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="key">Entity key</param>
         /// <returns>True for success, false on error</returns>
         public async Task<bool> DeleteAsync<T>(string key) {
-            Type type = typeof(T);
-            
+            var typeName = GetTypeName(typeof(T));
+
             Payload payload = new Payload()
             {
                 Content = string.Empty,
                 Method = HttpMethod.Delete,
-                Path = string.Format("_api/document/{0}/{1}?silent=true", type.Name, key)
+                Path = string.Format("_api/document/{0}/{1}?silent=true", typeName, key)
             };
 
             var result = await GetResultAsync(payload);
@@ -283,19 +284,26 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="item">Entity to insert</param>
         /// <returns>UpdatedDocument with new entity</returns>
         public async Task<UpdatedDocument<T>> InsertAsync<T>(T item) {
-            Type type = typeof(T);
+            var typeName = GetTypeName(typeof(T));
 
             Payload payload = new Payload()
             {
                 Content = JsonConvert.SerializeObject(item),
                 Method = HttpMethod.Post,
-                Path = string.Format("_api/document/{0}/?returnNew=true", type.Name)
+                Path = string.Format("_api/document/{0}/?returnNew=true", typeName)
             };
 
             var result = await GetResultAsync(payload);
 
             var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content);
             return json;
+        }
+
+        private string GetTypeName(Type t) {
+            if (t.GetTypeInfo().GetCustomAttribute(typeof(JsonObjectAttribute)) is JsonObjectAttribute attr) {
+                return attr.Id ?? t.Name;
+            }
+            return t.Name;
         }
 
         internal async Task<Result> GetResultAsync(Payload payload) {
