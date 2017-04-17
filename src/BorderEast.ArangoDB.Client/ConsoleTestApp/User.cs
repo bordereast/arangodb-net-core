@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ConsoleTestApp
 {
-    [JsonObject(Title = "title", Id = "id", Description = "desc")]
+
     [Collection(HasForeignKey = true)]
     public class User : ArangoBaseEntity
     {

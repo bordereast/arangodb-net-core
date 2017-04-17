@@ -45,8 +45,8 @@ namespace ConsoleTestApp {
             var juser = new User()
             {
                 Username = "andrew",
-                Password = "passcode"//,
-                //Roles = new List<Role>() { uR1.New, uR2.New}
+                Password = "passcode",
+                Roles = new List<Role>() { }
             };
 
 
@@ -60,7 +60,7 @@ namespace ConsoleTestApp {
 
             var s = json;
             //var u1 = client.DB().InsertAsync<Role>(r2).Result;
-            //var users = client.DB().GetAllAsync<User>();
+            var users = client.DB().GetAllAsync<User>();
 
             //var u = client.DB().GetByKeyAsync<User>("");
 
@@ -77,7 +77,7 @@ namespace ConsoleTestApp {
             //var users = client.DB().GetAllAsync<User>().Result;
             //var users2 = client.DB().GetAllKeysAsync<User>().Result;
 
-            // var result = client.DB().InsertAsync<User>(juser);
+             var result = client.DB().InsertAsync<User>(juser);
             //var user = client.DB().Query<User>("for u in User return u").ToList().Result.First();
             //var user = client.DB().GetByKeyAsync<User>("1312460").Result;
             //var q = client.DB().Query<User>("", new { _key = 1235});

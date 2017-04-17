@@ -86,7 +86,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <returns>Single entity</returns>
         public async Task<T> GetByKeyAsync<T>(string key) {
             Type type = typeof(T);
-            var typeName = GetTypeName(type);
+            var typeName = DynamicUtil.GetTypeName(type);
 
             ForeignKey fk = HasForeignKey(type);
 
@@ -119,7 +119,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <typeparam name="T">Entity type</typeparam>
         /// <returns>List of entities</returns>
         public async Task<List<T>> GetAllAsync<T>() {
-            var typeName = GetTypeName(typeof(T));
+            var typeName = DynamicUtil.GetTypeName(typeof(T));
 
             ForeignKey fk = HasForeignKey(typeof(T));
 
@@ -129,8 +129,8 @@ namespace BorderEast.ArangoDB.Client.Database
                 return await Query<T>(q).ToListAsync();
             }
 
-            return await Query<T>("for x in @@col return x", 
-                new Dictionary<string, object>{{ "@col", typeName }}).ToListAsync();
+            return await Query<T>(string.Format("FOR x IN {0} RETURN x", typeName)).ToListAsync();
+            //new Dictionary<string, object>{{ "col", typeName }}).ToListAsync();
         }
 
         private AQLQuery BuildFKQuery(ForeignKey fk, Type baseType, dynamic parameters = null) {
@@ -143,12 +143,12 @@ namespace BorderEast.ArangoDB.Client.Database
             }
             
 
-            sb.Append("for x1 in  " + GetTypeName(baseType));
+            sb.Append("FOR x1 IN " + DynamicUtil.GetTypeName(baseType));
             // parms.Add("@col", baseType.Name);
 
             if (fk.IsForeignKey) {
                 for (var i = 0; i < fk.ForeignKeyTypes.Count; i++) {
-                    sb.AppendFormat(" LET {0} = ( for x in x1.{1} for {0} in {2} FILTER x == {0}._key return {0}) ",
+                    sb.AppendFormat(" LET {0} = ( FOR x IN x1.{1} FOR {0} IN {2} FILTER x == {0}._key RETURN {0}) ",
                         "a" + i, // {0}
                         fk.ForeignKeyTypes[i].Key,  // {1}
                         fk.ForeignKeyTypes[i].Value.Name);  // {2}
@@ -165,7 +165,7 @@ namespace BorderEast.ArangoDB.Client.Database
             }
 
             if (fk.IsForeignKey) {
-                sb.Append(" return merge (x1, {");
+                sb.Append(" RETURN MERGE (x1, {");
 
                 for (var i = 0; i < fk.ForeignKeyTypes.Count; i++) {
                     if (i > 0) {
@@ -179,7 +179,7 @@ namespace BorderEast.ArangoDB.Client.Database
 
                 sb.Append(" }) ");
             } else {
-                sb.Append(" return x1 ");
+                sb.Append(" RETURN x1 ");
             }
 
             q.Query = sb.ToString();
@@ -193,10 +193,12 @@ namespace BorderEast.ArangoDB.Client.Database
 
         private ForeignKey HasForeignKey(Type t) {
             ForeignKey fk = new ForeignKey();
+            // get custom CollectionAttribute
             var attribute = t.GetTypeInfo().GetCustomAttribute<CollectionAttribute>();
+            // if CollectionAttribute exists and sets HasForeignKey to true
             if (attribute != null && attribute.HasForeignKey) {
                 fk.ForeignKeyTypes = new List<KeyValuePair<string, Type>>();
-
+                // iterate over properties and extract each one that has a foreign key
                 foreach (var p in t.GetProperties()) {
                     var jca = p.GetCustomAttribute<JsonConverterAttribute>();
                     if (jca != null) {
@@ -221,7 +223,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <returns>List of entity keys</returns>
         public async Task<List<string>> GetAllKeysAsync<T>() {
             return await Query<string>("for x in @@col return x._key",
-                new Dictionary<string, object> { { "@col", GetTypeName(typeof(T)) } }).ToListAsync();
+                new Dictionary<string, object> { { "@col", DynamicUtil.GetTypeName(typeof(T)) } }).ToListAsync();
         }
 
         /// <summary>
@@ -232,7 +234,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="item">Entity with all or partial properties</param>
         /// <returns>UpdatedDocument with complete new Entity</returns>
         public async Task<UpdatedDocument<T>> UpdateAsync<T>(string key, T item) {
-            var typeName = GetTypeName(typeof(T));
+            var typeName = DynamicUtil.GetTypeName(typeof(T));
 
             HttpMethod method = new HttpMethod("PATCH");
 
@@ -256,7 +258,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="key">Entity key</param>
         /// <returns>True for success, false on error</returns>
         public async Task<bool> DeleteAsync<T>(string key) {
-            var typeName = GetTypeName(typeof(T));
+            var typeName = DynamicUtil.GetTypeName(typeof(T));
 
             Payload payload = new Payload()
             {
@@ -284,7 +286,7 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="item">Entity to insert</param>
         /// <returns>UpdatedDocument with new entity</returns>
         public async Task<UpdatedDocument<T>> InsertAsync<T>(T item) {
-            var typeName = GetTypeName(typeof(T));
+            var typeName = DynamicUtil.GetTypeName(typeof(T));
 
             Payload payload = new Payload()
             {
@@ -299,12 +301,7 @@ namespace BorderEast.ArangoDB.Client.Database
             return json;
         }
 
-        private string GetTypeName(Type t) {
-            if (t.GetTypeInfo().GetCustomAttribute(typeof(JsonObjectAttribute)) is JsonObjectAttribute attr) {
-                return attr.Id ?? t.Name;
-            }
-            return t.Name;
-        }
+        
 
         internal async Task<Result> GetResultAsync(Payload payload) {
 
