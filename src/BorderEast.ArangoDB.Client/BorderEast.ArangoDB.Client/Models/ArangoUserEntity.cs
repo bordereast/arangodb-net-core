@@ -4,8 +4,16 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace BorderEast.ArangoDB.Client.Models {
+
+    /// <summary>
+    /// Represents the ArangoDB User with all known properties. Need to insert new
+    /// Arango User via API.
+    /// </summary>
     public class ArangoUserEntity : ArangoBaseEntity {
 
+        /// <summary>
+        /// Public constructor
+        /// </summary>
         public ArangoUserEntity() {
             ConfigData = new Dictionary<string, string>();
             Databases = new Dictionary<string, string>();

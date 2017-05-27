@@ -6,11 +6,9 @@ namespace BorderEast.ArangoDB.Client.Database.AQLCursor {
     public class AQLExtra {
 
         [JsonProperty(PropertyName = "stats", NullValueHandling = NullValueHandling.Ignore)]
-        [ArangoField(Name = "stats")]
         public Dictionary<string, object> Stats { get; set; }
 
         [JsonProperty(PropertyName = "warnings", NullValueHandling = NullValueHandling.Ignore)]
-        [ArangoField(Name = "warnings")]
         public List<string> Warnings { get; set; }
     }
 }

@@ -3,22 +3,22 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PackageId>BorderEast.ArangoDB.Client</PackageId>
-    <PackageVersion>0.1.01</PackageVersion>
+    <PackageVersion>0.1.07</PackageVersion>
     <Authors>Border East</Authors>
     <Description>DotNet Core ArangoDB Client</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>alpha release</PackageReleaseNotes>
+    <PackageReleaseNotes>fixed bug related to ASPNET Core Identity integration</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) Border East. All rights reserved.</Copyright>
     <PackageTags>arangodb database-client netcore</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.1.01</Version>
+    <Version>0.1.07</Version>
     <PackageLicenseUrl>https://github.com/bordereast/arangodb-net-core/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/bordereast/arangodb-net-core</PackageProjectUrl>
     <PackageIconUrl>https://avatars1.githubusercontent.com/u/27213082?v=3&amp;s=200</PackageIconUrl>
     <RepositoryUrl>https://github.com/bordereast/arangodb-net-core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
-    <FileVersion>1.0.0.1</FileVersion>
+    <AssemblyVersion>1.0.0.7</AssemblyVersion>
+    <FileVersion>1.0.0.7</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -31,6 +31,12 @@
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Arango.VelocyPack">
+      <HintPath>libs\Arango.VelocyPack.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

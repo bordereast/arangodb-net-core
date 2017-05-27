@@ -66,7 +66,7 @@ namespace BorderEast.ArangoDB.Client.Database
             
             Payload payload = new Payload()
             {
-                Content = JsonConvert.SerializeObject(query),
+                Content = JsonConvert.SerializeObject(query, database.databaseSettings.JsonSettings),
                 Method = HttpMethod.Post,
                 Path = "_api/cursor"
             };

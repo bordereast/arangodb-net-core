@@ -47,56 +47,58 @@ namespace BorderEast.ArangoDB.Client.Models.Collection
         }
 
         public ArangoCollection() {
+            JournalSize = 1048576;
+            ReplicationFactor = 1;
+            KeyOptions = new ArangoKeyOptions
+            {
+                AllowUserKeys = true,
+                Type = "traditional"
+            };
+            WaitForSync = false;
+            DoCompact = true;
+            IsVolatile = false;
+            ShardKeys = new[] { "_key" };
+            NumberOfShards = 1;
+            Type = CollectionType.Document;
+            IndexBuckets = 16;
 
         }
 
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int JournalSize { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int ReplicationFactor { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ArangoKeyOptions KeyOptions { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool WaitForSync { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool DoCompact { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool IsVolatile { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string[] ShardKeys { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int NumberOfShards { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool IsSystem { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public CollectionType Type { get; set; }
 
-        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Include)]
-        [ArangoField(Name = "name")]
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int IndexBuckets { get; set; }
 
     }

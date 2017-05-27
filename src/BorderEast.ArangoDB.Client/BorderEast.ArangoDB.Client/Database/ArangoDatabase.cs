@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Linq;
 using BorderEast.ArangoDB.Client.Database.AQLCursor;
+using BorderEast.ArangoDB.Client.Models.Collection;
 
 namespace BorderEast.ArangoDB.Client.Database
 {
@@ -32,6 +33,68 @@ namespace BorderEast.ArangoDB.Client.Database
             this.databaseSettings = databaseSettings;
             this.connectionPool = connectionPool;
         }
+
+        #region collections
+
+        /// <summary>
+        /// Create a collection based on the passed in dynamic object 
+        /// Example: CreateCollection(new { Name = somename}) 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public async Task<CollectionResult> CreateCollection<T>(dynamic parameters) {
+
+            var ctype = typeof(ArangoCollection);
+            // get settable public properties of the type
+            var props = ctype.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.GetSetMethod() != null);
+
+            // create an instance of the type
+            var collection = Activator.CreateInstance(ctype);
+
+            // set property values using reflection
+            var values = DynamicUtil.DynamicToDict(parameters);
+            foreach (var prop in props) {
+                if (values.ContainsKey(prop.Name)) {
+                    prop.SetValue(collection, values[prop.Name]);
+                }
+                
+            }
+
+            return await CreateCollection<CollectionResult>(collection as ArangoCollection);
+        }
+
+        /// <summary>
+        /// Create a collection based on the given ArangoCollection
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        public async Task<CollectionResult> CreateCollection<T>(ArangoCollection collection) {
+
+            Payload payload = new Payload()
+            {
+                Content = JsonConvert.SerializeObject(collection, databaseSettings.JsonSettings),
+                Method = HttpMethod.Post,
+                Path = string.Format("_api/collection")
+            };
+
+            var result = await GetResultAsync(payload);
+
+            if (result == null) {
+                return default(CollectionResult);
+            }
+
+            var json = JsonConvert.DeserializeObject<CollectionResult>(result.Content);
+            return json;
+
+        }
+
+
+        #endregion
+
+        #region query
 
         /// <summary>
         /// Ad hoc AQL query that will be serialized to give type T
@@ -62,6 +125,23 @@ namespace BorderEast.ArangoDB.Client.Database
         private ArangoQuery<T> Query<T>(AQLQuery query) {
             return new ArangoQuery<T>(query, connectionPool, this);
         }
+
+        #endregion
+
+
+        #region get
+
+
+        /// <summary>
+        /// Get all keys of a given entity
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <returns>List of entity keys</returns>
+        public async Task<List<string>> GetAllKeysAsync<T>() {
+            return await Query<string>("for x in @@col return x._key",
+                new Dictionary<string, object> { { "@col", DynamicUtil.GetTypeName(typeof(T)) } }).ToListAsync();
+        }
+
 
         /// <summary>
         /// Get entities by example
@@ -132,6 +212,9 @@ namespace BorderEast.ArangoDB.Client.Database
             return await Query<T>(string.Format("FOR x IN {0} RETURN x", typeName)).ToListAsync();
             //new Dictionary<string, object>{{ "col", typeName }}).ToListAsync();
         }
+        #endregion
+
+        #region utility
 
         private AQLQuery BuildFKQuery(ForeignKey fk, Type baseType, dynamic parameters = null) {
             var q = new AQLQuery();
@@ -159,7 +242,7 @@ namespace BorderEast.ArangoDB.Client.Database
             if(dParams != null && dParams.Count > 0) {
                 var dp = dParams.ToArray();
                 for(var i = 0; i < dp.Length; i++) {
-                    sb.AppendFormat(" FILTER x1.{0} == @{1} ", dp[i].Key, "pval" + i);
+                    sb.AppendFormat(" FILTER x1.{0} == TO_STRING(@{1}) ", dp[i].Key, "pval" + i);
                     parms.Add("pval" + i, dp[i].Value);
                 }
             }
@@ -216,16 +299,10 @@ namespace BorderEast.ArangoDB.Client.Database
             return fk;
         }
 
-        /// <summary>
-        /// Get all keys of a given entity
-        /// </summary>
-        /// <typeparam name="T">Entity type</typeparam>
-        /// <returns>List of entity keys</returns>
-        public async Task<List<string>> GetAllKeysAsync<T>() {
-            return await Query<string>("for x in @@col return x._key",
-                new Dictionary<string, object> { { "@col", DynamicUtil.GetTypeName(typeof(T)) } }).ToListAsync();
-        }
+        #endregion
 
+
+        #region C*UD
         /// <summary>
         /// Update an entity
         /// </summary>
@@ -240,14 +317,14 @@ namespace BorderEast.ArangoDB.Client.Database
 
             Payload payload = new Payload()
             {
-                Content = JsonConvert.SerializeObject(item),
+                Content = JsonConvert.SerializeObject(item, databaseSettings.JsonSettings),
                 Method = method,
                 Path = string.Format("_api/document/{0}/{1}?mergeObjects=false&returnNew=true", typeName, key)
             };
 
             var result = await GetResultAsync(payload);
             
-            var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content);
+            var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content, databaseSettings.JsonSettings);
             return json;
         }
 
@@ -286,23 +363,29 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="item">Entity to insert</param>
         /// <returns>UpdatedDocument with new entity</returns>
         public async Task<UpdatedDocument<T>> InsertAsync<T>(T item) {
-            var typeName = DynamicUtil.GetTypeName(typeof(T));
+            try {
+                var typeName = DynamicUtil.GetTypeName(typeof(T));
 
-            Payload payload = new Payload()
-            {
-                Content = JsonConvert.SerializeObject(item),
-                Method = HttpMethod.Post,
-                Path = string.Format("_api/document/{0}/?returnNew=true", typeName)
-            };
+                Payload payload = new Payload()
+                {
+                    Content = JsonConvert.SerializeObject(item, databaseSettings.JsonSettings),
+                    Method = HttpMethod.Post,
+                    Path = string.Format("_api/document/{0}/?returnNew=true", typeName)
+                };
 
-            var result = await GetResultAsync(payload);
+                var result = await GetResultAsync(payload);
 
-            var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content);
-            return json;
+                var json = JsonConvert.DeserializeObject<UpdatedDocument<T>>(result.Content, databaseSettings.JsonSettings);
+                return json;
+            }catch(System.Exception e) {
+                System.Diagnostics.Debug.WriteLine(e.StackTrace);
+                return null;
+            }
         }
 
-        
+        #endregion
 
+        #region internal
         internal async Task<Result> GetResultAsync(Payload payload) {
 
             // Get connection just before we use it
@@ -315,7 +398,7 @@ namespace BorderEast.ArangoDB.Client.Database
             return result;
         }
 
-        
+        #endregion
 
     }
 }

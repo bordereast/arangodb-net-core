@@ -1,5 +1,6 @@
 ﻿using BorderEast.ArangoDB.Client;
 using BorderEast.ArangoDB.Client.Database;
+using Newtonsoft.Json.Serialization;
 using RichardSzalay.MockHttp;
 using System;
 using System.Collections.Generic;

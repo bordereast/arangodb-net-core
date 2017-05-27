@@ -13,11 +13,9 @@ namespace BorderEast.ArangoDB.Client.Database.AQLCursor
         }
 
         [JsonProperty("query")]
-        [ArangoField(Name ="query")]
         public string Query { get; set; }
 
         [JsonProperty(PropertyName = "bindVars", NullValueHandling = NullValueHandling.Ignore)]
-        [ArangoField(Name = "bindVars")]
         public Dictionary<string, object> Parameters { get; set; }
     }
 }

@@ -13,4 +13,10 @@
     <ProjectReference Include="..\BorderEast.ArangoDB.Client\BorderEast.ArangoDB.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Arango.VelocyPack">
+      <HintPath>..\BorderEast.ArangoDB.Client\libs\Arango.VelocyPack.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
