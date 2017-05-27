@@ -3,7 +3,7 @@
 
 .NETCoreApp1.1 ArangoDB Client Driver
 
-Contributions welcome, follow code style.
+Contributions welcome.
 
 ### AQL Based
 For those who like to write pure AQL queries for ultimate flexibility. This will mainly focus on AQL string queries at first with convience methods for Insert, Update, Delete etc.
