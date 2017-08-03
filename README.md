@@ -3,7 +3,7 @@
 
 .NETCoreApp1.1 ArangoDB Client Driver
 
-Contributions welcome, follow code style.
+Contributions welcome.
 
 ### AQL Based
 For those who like to write pure AQL queries for ultimate flexibility. This will mainly focus on AQL string queries at first with convience methods for Insert, Update, Delete etc.
@@ -30,6 +30,7 @@ InsertAsync | Done | Auto
 GetAllAsync | Done | Auto
 GetAllKeysAsync | Done | N/A
 GetByExampleAsync | Done | Auto
+CreateCollection | Done | N/A
 
 ### Credits
 Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclient.net) and [yojimbo87](https://github.com/yojimbo87/ArangoDB-NET), this is a .NETCoreApp1.1 library.
