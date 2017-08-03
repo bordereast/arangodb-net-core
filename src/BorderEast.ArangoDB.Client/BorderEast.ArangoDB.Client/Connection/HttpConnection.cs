@@ -15,19 +15,22 @@ namespace BorderEast.ArangoDB.Client.Connection
 
         public HttpConnection(ClientSettings databaseSettings) {
 
-            if(databaseSettings.HTTPClient != null) {
+            this.databaseSettings = databaseSettings;
+
+            bool isSystem = databaseSettings.DatabaseName == "_system";
+
+            if (databaseSettings.HTTPClient != null ) {
                 client = databaseSettings.HTTPClient;
             } else {
                 client = new HttpClient();
             }
 
-            this.databaseSettings = databaseSettings;
+            if(client.BaseAddress == null) {
+                client.BaseAddress = new Uri((databaseSettings.Protocol == ProtocolType.HTTPS ? "https" : "http") +
+                        "://" + databaseSettings.ServerAddress + ":" + databaseSettings.ServerPort + "/"
+                        + (isSystem ? string.Empty : string.Format("_db/{0}/", databaseSettings.DatabaseName)));
+            }
 
-            bool isSystem = databaseSettings.DatabaseName == "_system";
-
-            client.BaseAddress = new Uri((databaseSettings.Protocol == ProtocolType.HTTPS ? "https" : "http") + 
-                "://" + databaseSettings.ServerAddress + ":" + databaseSettings.ServerPort + "/" 
-                + (isSystem ? string.Empty : string.Format("_db/{0}/", databaseSettings.DatabaseName)));
 
         }
 

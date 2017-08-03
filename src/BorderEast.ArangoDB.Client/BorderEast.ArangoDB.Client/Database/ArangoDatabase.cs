@@ -118,7 +118,14 @@ namespace BorderEast.ArangoDB.Client.Database
             return Query<T>(query, dParams);
         }
 
-        private ArangoQuery<T> Query<T>(string query, Dictionary<string, object> parameters) {
+        /// <summary>
+        /// Ad hoc AQL query that will be serialized to give type T
+        /// </summary>
+        /// <typeparam name="T">Entity class</typeparam>
+        /// <param name="query">AQL query text</param>
+        /// <param name="parameters">Dictionary of parmeters, use JSON names (_key instead of Key)</param>
+        /// <returns>ArangoQuery of T</returns>
+        public ArangoQuery<T> Query<T>(string query, Dictionary<string, object> parameters) {
             return new ArangoQuery<T>(query, parameters, connectionPool, this);
         }
 
@@ -131,6 +138,9 @@ namespace BorderEast.ArangoDB.Client.Database
 
         #region get
 
+        public JsonSerializerSettings GetJsonSettings() {
+            return databaseSettings.JsonSettings;
+        }
 
         /// <summary>
         /// Get all keys of a given entity
@@ -233,7 +243,7 @@ namespace BorderEast.ArangoDB.Client.Database
                 for (var i = 0; i < fk.ForeignKeyTypes.Count; i++) {
                     sb.AppendFormat(" LET {0} = ( FOR x IN x1.{1} FOR {0} IN {2} FILTER x == {0}._key RETURN {0}) ",
                         "a" + i, // {0}
-                        fk.ForeignKeyTypes[i].Key,  // {1}
+                        fk.ForeignKeyTypes[i].Key.ToLowerInvariant(),  // {1}
                         fk.ForeignKeyTypes[i].Value.Name);  // {2}
                 }
             }
@@ -257,7 +267,7 @@ namespace BorderEast.ArangoDB.Client.Database
 
                     sb.AppendFormat("{1}: {0}", // Roles: a1
                         "a" + i, // {0}
-                        fk.ForeignKeyTypes[i].Key);  // {2}
+                        fk.ForeignKeyTypes[i].Key.ToLowerInvariant());  // {2}
                 }
 
                 sb.Append(" }) ");
