@@ -320,10 +320,12 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <param name="key">Key of entity</param>
         /// <param name="item">Entity with all or partial properties</param>
         /// <returns>UpdatedDocument with complete new Entity</returns>
-        public async Task<UpdatedDocument<T>> UpdateAsync<T>(string key, T item) {
+        public async Task<UpdatedDocument<T>> UpdateAsync<T>(string key, T item) where T : ArangoBaseEntity {
             var typeName = DynamicUtil.GetTypeName(typeof(T));
 
             HttpMethod method = new HttpMethod("PATCH");
+
+            item.UpdatedDateTime = DateTime.UtcNow;
 
             Payload payload = new Payload()
             {
@@ -372,9 +374,11 @@ namespace BorderEast.ArangoDB.Client.Database
         /// <typeparam name="T">Entity type</typeparam>
         /// <param name="item">Entity to insert</param>
         /// <returns>UpdatedDocument with new entity</returns>
-        public async Task<UpdatedDocument<T>> InsertAsync<T>(T item) {
+        public async Task<UpdatedDocument<T>> InsertAsync<T>(T item) where T: ArangoBaseEntity {
             try {
                 var typeName = DynamicUtil.GetTypeName(typeof(T));
+
+                item.CreatedDateTime = DateTime.UtcNow;
 
                 Payload payload = new Payload()
                 {

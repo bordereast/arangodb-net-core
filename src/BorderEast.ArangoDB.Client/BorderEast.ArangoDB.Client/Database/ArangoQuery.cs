@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using BorderEast.ArangoDB.Client.Exception;
 
 namespace BorderEast.ArangoDB.Client.Database
 {
@@ -81,6 +82,10 @@ namespace BorderEast.ArangoDB.Client.Database
             }
 
             var json = JsonConvert.DeserializeObject<AQLResult<T>>(result.Content);
+
+            if (json.Error)
+                throw new QueryExecutionException(json.ErrorMessage);
+
             return json.Result;
         }
 
