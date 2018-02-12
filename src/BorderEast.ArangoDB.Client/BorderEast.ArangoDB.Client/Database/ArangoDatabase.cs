@@ -397,6 +397,40 @@ namespace BorderEast.ArangoDB.Client.Database
             }
         }
 
+        /// <summary>
+        /// Insert entity(s)
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <param name="items">List of Entity(s) to insert</param>
+        /// <returns>UpdatedDocument(s) with new entity(s)</returns>
+        public async Task<IEnumerable<UpdatedDocument<T>>> InsertManyAsync<T>(List<T> items) where T : ArangoBaseEntity
+        {
+            try
+            {
+                var typeName = DynamicUtil.GetTypeName(typeof(T));
+
+                if (items.Count < 1) return null;
+                items.ForEach(x => x.CreatedDateTime = DateTime.UtcNow);
+
+                Payload payload = new Payload()
+                {
+                    Content = JsonConvert.SerializeObject(items, databaseSettings.JsonSettings),
+                    Method = HttpMethod.Post,
+                    Path = $"_api/document/{typeName}/?returnNew=true"
+                };
+
+                var result = await GetResultAsync(payload);
+
+                var json = JsonConvert
+                    .DeserializeObject<IEnumerable<UpdatedDocument<T>>>(result.Content, databaseSettings.JsonSettings);
+                return json;
+            }
+            catch (System.Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.StackTrace);
+                return null;
+            }
+        }
         #endregion
 
         #region internal
