@@ -12,8 +12,6 @@ namespace BorderEast.ArangoDB.ClientTest
 
     public class MethodsTest {
 
-
-
         [Fact]
         public void AQLSelectEntity() {
 
@@ -56,6 +54,44 @@ namespace BorderEast.ArangoDB.ClientTest
             Assert.Equal("passcode", insertUser.Password);
             Assert.Equal(id, inserted.Key);           
 
+        }
+
+        [Fact]
+        public void InsertManyAsyncTest()
+        {
+            var client = MockSetup.GetClient();
+
+            var id1 = "8633435";
+            var id2 = "8633439";
+
+            var listOfUsers = new List<InsertManyUser>
+            {
+                new InsertManyUser()
+                {
+                    Password = "passcode1",
+                    Username = "jdoe1"
+                },
+                new InsertManyUser()
+                {
+                    Password = "passcode2",
+                    Username = "jdoe2"
+                },
+            };
+
+            var inserted = client.DB().InsertManyAsync(listOfUsers).Result;
+
+            Assert.Equal(inserted.Count(), listOfUsers.Count());
+
+            var insertUser1 = inserted.First();
+            var insertUser2 = inserted.Last();
+
+            Assert.Equal("jdoe1", insertUser1.New.Username);
+            Assert.Equal("passcode1", insertUser1.New.Password);
+            Assert.Equal(id1, insertUser1.Key);
+
+            Assert.Equal("jdoe2", insertUser2.New.Username);
+            Assert.Equal("passcode2", insertUser2.New.Password);
+            Assert.Equal(id2, insertUser2.Key);
         }
 
         [Fact]

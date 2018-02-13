@@ -68,12 +68,12 @@ namespace BorderEast.ArangoDB.ClientTest.MockData
 
             m.When(HttpMethod.Post, "*/_api/cursor?query=Rk9SIHggSU4gVXNlciBSRVRVUk4geA==").
                 Respond("application/json", "{\"result\":[{\"_id\":\"User/1312460\",\"_key\":\"1312460\",\"_rev\":\"_U0xbgLu---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1314279\",\"_key\":\"1314279\",\"_rev\":\"_U0x1-he---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1313287\",\"_key\":\"1313287\",\"_rev\":\"_U0xnhJO---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"},{\"_id\":\"User/1313328\",\"_key\":\"1313328\",\"_rev\":\"_U0xo_h2---\",\"passwd\":\"passcode\",\"userName\":\"andrew\"}],\"hasMore\":false,\"cached\":false,\"extra\":{\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"scannedFull\":4,\"scannedIndex\":0,\"filtered\":0,\"executionTime\":9.999275207519531e-4},\"warnings\":[]},\"error\":false,\"code\":201}");
-            
+
             m.When(HttpMethod.Post, "*/_api/cursor").
                 Respond("application/json", "{\"result\":[\"6489\",\"6503\"],\"hasMore\":false,\"cached\":false,\"extra\":{\"stats\":{\"writesExecuted\":0,\"writesIgnored\":0,\"scannedFull\":2,\"scannedIndex\":0,\"filtered\":0,\"executionTime\":0},\"warnings\":[]},\"error\":false,\"code\":201}");
 
-
+            m.When(HttpMethod.Post, "*/_api/document/InsertManyUser/?returnNew=true").
+                Respond("application/json", "[{\"_id\":\"InsertManyUser/8633435\",\"_key\":\"8633435\",\"_rev\":\"_WWsxBBm---\",\"new\":{\"_key\":\"8633435\",\"_id\":\"InsertManyUser/8633435\",\"_rev\":\"_WWsxBBm---\",\"userName\":\"jdoe1\",\"passwd\":\"passcode1\",\"createdBy\":null,\"createdDateTime\":\"0001-01-01T00:00:00Z\",\"createdFunction\":null,\"updatedBy\":null,\"updatedDateTime\":\"0001-01-01T00:00:00Z\",\"updatedFunction\":null}},{\"_id\":\"InsertManyUser/8633439\",\"_key\":\"8633439\",\"_rev\":\"_WWsxBBm--_\",\"new\":{\"_key\":\"8633439\",\"_id\":\"InsertManyUser/8633439\",\"_rev\":\"_WWsxBBm--_\",\"userName\":\"jdoe2\",\"passwd\":\"passcode2\",\"createdBy\":null,\"createdDateTime\":\"0001-01-01T00:00:00Z\",\"createdFunction\":null,\"updatedBy\":null,\"updatedDateTime\":\"0001-01-01T00:00:00Z\",\"updatedFunction\":null}}]");
         }
-
     }
 }
