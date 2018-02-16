@@ -34,4 +34,10 @@ GetByExampleAsync | Done | Auto
 CreateCollection | Done | N/A
 
 ### Credits
-Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclient.net) and [yojimbo87](https://github.com/yojimbo87/ArangoDB-NET), this is a .NETCoreApp1.1 library.
+Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclient.net) and [yojimbo87](https://github.com/yojimbo87/ArangoDB-NET), this is a .NETCoreApp2 library.
+
+#### Contributions by
+
+https://github.com/irriss
+https://github.com/Arkos-LoG
+
