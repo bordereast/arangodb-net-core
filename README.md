@@ -39,5 +39,6 @@ Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclien
 #### Contributions by
 
 https://github.com/irriss
+
 https://github.com/Arkos-LoG
 
