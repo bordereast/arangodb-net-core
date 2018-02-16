@@ -27,6 +27,7 @@ GetByKeyAsync | Done | Auto
 UpdateAsync | Done | Auto
 DeleteAsync | Done | N/A
 InsertAsync | Done | Auto
+InsertManyAsync | Done | Auto
 GetAllAsync | Done | Auto
 GetAllKeysAsync | Done | N/A
 GetByExampleAsync | Done | Auto
