@@ -6,9 +6,10 @@ namespace BorderEast.ArangoDB.Client.Exception
 {
     public class QueryExecutionException : System.Exception
     {
-        public QueryExecutionException(string message) : base(message)
+        public int ErrorNumber { get; private set; }
+        public QueryExecutionException(string message, int errorNum) : base(message)
         {
-
+            ErrorNumber = errorNum;
         }
     }
 }
