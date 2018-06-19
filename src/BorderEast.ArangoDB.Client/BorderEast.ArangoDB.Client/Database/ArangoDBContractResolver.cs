@@ -9,7 +9,7 @@ namespace BorderEast.ArangoDB.Client.Database
     public class ArangoDBContractResolver : DefaultContractResolver {
         public ArangoDBContractResolver() : base()
         {
-            NamingStrategy = new DefaultNamingStrategy
+            NamingStrategy = new CamelCaseNamingStrategy
             {
                 ProcessDictionaryKeys = true,
                 OverrideSpecifiedNames = false,
