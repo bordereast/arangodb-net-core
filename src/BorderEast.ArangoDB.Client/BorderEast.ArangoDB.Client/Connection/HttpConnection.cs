@@ -5,6 +5,7 @@ using System.Text;
 using BorderEast.ArangoDB.Client.Database;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using BorderEast.ArangoDB.Client.Exception;
 
 namespace BorderEast.ArangoDB.Client.Connection
 {
@@ -58,6 +59,10 @@ namespace BorderEast.ArangoDB.Client.Connection
             if(responseTask.StatusCode == System.Net.HttpStatusCode.NotFound) {
                 return null;
             }
+
+            if (!responseTask.IsSuccessStatusCode 
+                && responseTask.StatusCode != System.Net.HttpStatusCode.BadRequest) //there is detailed info in Content for bad request
+                throw new QueryExecutionException(responseTask.StatusCode.ToString(), (int)responseTask.StatusCode);
 
             Result result = new Result()
             {
