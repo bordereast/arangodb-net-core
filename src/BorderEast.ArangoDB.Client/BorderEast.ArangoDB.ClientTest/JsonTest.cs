@@ -1,6 +1,7 @@
 ﻿using BorderEast.ArangoDB.Client.Database;
 using BorderEast.ArangoDB.ClientTest.MockData;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,19 @@ namespace BorderEast.ArangoDB.ClientTest
     public class JsonTest
     {
 
-        private JsonSerializerSettings JsonSettings = new JsonSerializerSettings
+        private readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
             ContractResolver = new ArangoDBContractResolver(),
+            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+            NullValueHandling = NullValueHandling.Include,
+            DefaultValueHandling = DefaultValueHandling.Include,
+            StringEscapeHandling = StringEscapeHandling.Default,
+            Formatting = Formatting.Indented,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+        private readonly JsonSerializerSettings JsonSettingsCamelCase = new JsonSerializerSettings
+        {
+            ContractResolver = new ArangoDBContractResolver(new CamelCaseNamingStrategy()),
             DateTimeZoneHandling = DateTimeZoneHandling.Utc,
             NullValueHandling = NullValueHandling.Include,
             DefaultValueHandling = DefaultValueHandling.Include,
@@ -43,13 +54,22 @@ namespace BorderEast.ArangoDB.ClientTest
 
             var author = new Author()
             {
-                Name = "Some Author"
+                Name = "Some Author",
+                camelName = "Some Author"
             };
 
+            // Default is now same case as object name
             var jsonStr = JsonConvert.SerializeObject(author, JsonSettings);
 
-            Assert.DoesNotContain("Name", jsonStr);
+            Assert.DoesNotContain("name", jsonStr);
+            Assert.Contains("Name", jsonStr);
+            Assert.Contains("camelName", jsonStr);
+
+            jsonStr = JsonConvert.SerializeObject(author, JsonSettingsCamelCase);
+
+            Assert.DoesNotContain("\"Name", jsonStr, StringComparison.InvariantCulture);
             Assert.Contains("name", jsonStr);
+            Assert.Contains("camelName", jsonStr);
         }
 
         [Fact]

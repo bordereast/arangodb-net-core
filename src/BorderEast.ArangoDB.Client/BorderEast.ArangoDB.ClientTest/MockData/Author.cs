@@ -12,6 +12,8 @@ namespace BorderEast.ArangoDB.ClientTest.MockData
     public class Author : ArangoBaseEntity {
         public string Name { get; set; }
 
+        public string camelName { get; set; }
+
         [JsonConverter(typeof(ForeignKeyConverter))]
         public List<Book> Books { get; set; }
     }

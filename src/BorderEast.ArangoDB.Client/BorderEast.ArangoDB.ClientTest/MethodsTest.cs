@@ -12,6 +12,15 @@ namespace BorderEast.ArangoDB.ClientTest
 
     public class MethodsTest {
 
+
+        [Fact]
+        public void GetByKeyAsync()
+        {
+            var client = MockSetup.GetClient();
+            Assert.NotNull(client.DB().GetByKeyAsync<User>("1312460").Result);
+        }
+
+
         [Fact]
         public void AQLSelectEntity() {
 
@@ -28,11 +37,6 @@ namespace BorderEast.ArangoDB.ClientTest
             Assert.Equal(4, users.Count());
         }
 
-        public void GetAllKeys() {
-            var client = MockSetup.GetClient();
-            var users = client.DB().GetAllKeysAsync<User>().Result;
-            Assert.Equal(2, users.Count());
-        }
 
         [Fact]
         public void CRUDMethods() {
@@ -119,11 +123,6 @@ namespace BorderEast.ArangoDB.ClientTest
             Assert.Null(client.DB().GetByKeyAsync<User>("1234").Result);
         }
 
-        [Fact]
-        public void GetByKeyAsync() {
-            var client = MockSetup.GetClient();
-            Assert.NotNull(client.DB().GetByKeyAsync<User>("1312460").Result);
-        }
 
         [Fact]
         public void DeleteAsync() {
