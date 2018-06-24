@@ -9,7 +9,7 @@ Contributions welcome.
 For those who like to write pure AQL queries for ultimate flexibility. This will mainly focus on AQL string queries at first with convience methods for Insert, Update, Delete etc.
 
 ### Managed Foreign Keys
-This client supports a managed foreign key feature. This allowa an entity to include a `List<T>` of another entity by setting a data annotation. This will work with two tables in the database but allow users to work the entity as if it was a single document. While this is duplicating some relational database features, this is the most common feature lacking in client libraries.
+This client supports a managed foreign key feature. This allows an entity to include a `List<T>` of another entity by setting a data annotation. This will work with two tables in the database but allow users to work the entity as if it was a single document. While this is duplicating some relational database features, this is the most common feature lacking in client libraries.
 
 ArangoDB has an excellent join feature via AQL, and this is the next logical step on the client side. [Please see the documentation for examples](https://github.com/bordereast/arangodb-net-core/wiki)
 
@@ -27,10 +27,18 @@ GetByKeyAsync | Done | Auto
 UpdateAsync | Done | Auto
 DeleteAsync | Done | N/A
 InsertAsync | Done | Auto
+InsertManyAsync | Done | Auto
 GetAllAsync | Done | Auto
 GetAllKeysAsync | Done | N/A
 GetByExampleAsync | Done | Auto
 CreateCollection | Done | N/A
 
 ### Credits
-Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclient.net) and [yojimbo87](https://github.com/yojimbo87/ArangoDB-NET), this is a .NETCoreApp1.1 library.
+Based loosely on ideas taken from [ra0o0f](https://github.com/ra0o0f/arangoclient.net) and [yojimbo87](https://github.com/yojimbo87/ArangoDB-NET), this is a .NETCoreApp2 library.
+
+#### Contributions by
+
+[Irriss](https://github.com/irriss)
+
+[Arkos-LoG](https://github.com/Arkos-LoG)
+

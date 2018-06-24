@@ -84,7 +84,7 @@ namespace BorderEast.ArangoDB.Client.Database
             var json = JsonConvert.DeserializeObject<AQLResult<T>>(result.Content);
 
             if (json.Error)
-                throw new QueryExecutionException(json.ErrorMessage);
+                throw new QueryExecutionException(json.ErrorMessage, json.ErrorNumber);
 
             return json.Result;
         }
