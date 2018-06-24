@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderEast.ArangoDB.Client", "BorderEast.ArangoDB.Client\BorderEast.ArangoDB.Client.csproj", "{BEF256FD-B337-485D-A113-0CD3F444C11D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderEast.ArangoDB.Client", "BorderEast.ArangoDB.Client\BorderEast.ArangoDB.Client.csproj", "{BEF256FD-B337-485D-A113-0CD3F444C11D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestApp", "ConsoleTestApp\ConsoleTestApp.csproj", "{8F467441-6C10-4AAD-A657-20FF94D4F108}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTestApp", "ConsoleTestApp\ConsoleTestApp.csproj", "{8F467441-6C10-4AAD-A657-20FF94D4F108}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderEast.ArangoDB.ClientTest", "BorderEast.ArangoDB.ClientTest\BorderEast.ArangoDB.ClientTest.csproj", "{04903EEA-9310-4EB6-B28D-BC011A0A170F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderEast.ArangoDB.ClientTest", "BorderEast.ArangoDB.ClientTest\BorderEast.ArangoDB.ClientTest.csproj", "{04903EEA-9310-4EB6-B28D-BC011A0A170F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE97FE47-49CD-4F2F-A99E-6BB2292F4E20}
 	EndGlobalSection
 EndGlobal

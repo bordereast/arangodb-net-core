@@ -23,9 +23,9 @@ namespace BorderEast.ArangoDB.Client.Database
             };
         }
 
-        public ClientSettings(string serverAddress, int serverPort, ProtocolType protocolType, 
-            string systemPassword, string databaseName, string databaseUsername, string databasePassword, 
-            bool autoCreate, bool isDebug = false, ArangoDBContractResolver arangoDBContractResolver = null) : this()
+        public ClientSettings(string serverAddress, int serverPort, ProtocolType protocolType,
+            string systemPassword, string databaseName, string databaseUsername, string databasePassword,
+            bool autoCreate, bool isDebug = false, ArangoDBContractResolver arangoDBContractResolver = null) 
         {
             ServerAddress = serverAddress;
             ServerPort = serverPort;
@@ -35,10 +35,14 @@ namespace BorderEast.ArangoDB.Client.Database
             DatabaseCredential = new NetworkCredential(databaseUsername, databasePassword);
             AutoCreate = autoCreate;
 
+            if (arangoDBContractResolver == null)
+            {
+                arangoDBContractResolver = new ArangoDBContractResolver();
+            }
 
             JsonSettings = new JsonSerializerSettings
             {
-                ContractResolver = new ArangoDBContractResolver(),
+                ContractResolver = arangoDBContractResolver,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 NullValueHandling = NullValueHandling.Include,
                 DefaultValueHandling = DefaultValueHandling.Include,
@@ -46,6 +50,7 @@ namespace BorderEast.ArangoDB.Client.Database
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
+
 
 
             IsDebug = isDebug;
