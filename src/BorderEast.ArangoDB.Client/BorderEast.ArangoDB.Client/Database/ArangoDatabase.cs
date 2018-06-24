@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Linq;
 using BorderEast.ArangoDB.Client.Database.AQLCursor;
 using BorderEast.ArangoDB.Client.Models.Collection;
+using BorderEast.ArangoDB.Client.Models.Database;
 
 namespace BorderEast.ArangoDB.Client.Database
 {
@@ -33,6 +34,37 @@ namespace BorderEast.ArangoDB.Client.Database
             this.databaseSettings = databaseSettings;
             this.connectionPool = connectionPool;
         }
+
+        #region database
+
+        /// <summary>
+        /// Create a new database within Arango. Use the default DB to create new databases.
+        /// </summary>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        public async Task<DatabaseResult> CreateDatabase(NewDatabase database)
+        {
+
+            Payload payload = new Payload()
+            {
+                Content = JsonConvert.SerializeObject(database, databaseSettings.JsonSettings),
+                Method = HttpMethod.Post,
+                Path = string.Format("_api/database")
+            };
+
+            var result = await GetResultAsync(payload);
+
+            if (result == null)
+            {
+                return default(DatabaseResult);
+            }
+
+            var json = JsonConvert.DeserializeObject<DatabaseResult>(result.Content);
+            return json;
+
+        }
+
+        #endregion
 
         #region collections
 
@@ -409,7 +441,11 @@ namespace BorderEast.ArangoDB.Client.Database
             {
                 var typeName = DynamicUtil.GetTypeName(typeof(T));
 
-                if (items.Count < 1) return null;
+                if (items.Count < 1)
+                {
+                    return null;
+                }
+
                 items.ForEach(x => x.CreatedDateTime = DateTime.UtcNow);
 
                 Payload payload = new Payload()

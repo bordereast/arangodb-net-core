@@ -1,31 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-  </PropertyGroup>
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageId>BorderEast.ArangoDB.Client</PackageId>
-    <PackageVersion>0.1.07</PackageVersion>
+    <PackageVersion>0.1.10-rc</PackageVersion>
     <Authors>Border East</Authors>
     <Description>DotNet Core ArangoDB Client</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>fixed bug related to ASPNET Core Identity integration</PackageReleaseNotes>
+    <PackageReleaseNotes>Attempting to fix Github Issue #7</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) Border East. All rights reserved.</Copyright>
     <PackageTags>arangodb database-client netcore</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.1.07</Version>
+    <Version>0.1.010-rc</Version>
     <PackageLicenseUrl>https://github.com/bordereast/arangodb-net-core/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/bordereast/arangodb-net-core</PackageProjectUrl>
     <PackageIconUrl>https://avatars1.githubusercontent.com/u/27213082?v=3&amp;s=200</PackageIconUrl>
     <RepositoryUrl>https://github.com/bordereast/arangodb-net-core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>1.0.0.7</AssemblyVersion>
-    <FileVersion>1.0.0.7</FileVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -34,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />

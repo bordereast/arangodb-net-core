@@ -9,7 +9,7 @@ namespace BorderEast.ArangoDB.Client.Database
     public class ArangoDBContractResolver : DefaultContractResolver {
         public ArangoDBContractResolver() : base()
         {
-            NamingStrategy = new CamelCaseNamingStrategy
+            NamingStrategy = new DefaultNamingStrategy
             {
                 ProcessDictionaryKeys = true,
                 OverrideSpecifiedNames = false,
@@ -18,7 +18,15 @@ namespace BorderEast.ArangoDB.Client.Database
 
             IgnoreSerializableAttribute = false;
             IgnoreSerializableInterface = false;
-            
+
+        }
+        public ArangoDBContractResolver(NamingStrategy namingStrategy) : base()
+        {
+            NamingStrategy = namingStrategy;
+
+            IgnoreSerializableAttribute = false;
+            IgnoreSerializableInterface = false;
+
         }
 
         protected override IValueProvider CreateMemberValueProvider(MemberInfo member) {
