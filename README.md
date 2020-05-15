@@ -1,5 +1,5 @@
 ## BorderEast.ArangoDB.Client
-[![Build Status](https://travis-ci.org/bordereast/arangodb-net-core.svg?branch=master)](https://travis-ci.org/bordereast/arangodb-net-core)
+Depricated: please use https://github.com/Actify-Inc/arangodb-net-standard
 
 .NETCoreApp 2.0 ArangoDB Client Driver
 
