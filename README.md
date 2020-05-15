@@ -1,6 +1,7 @@
-## BorderEast.ArangoDB.Client
-Depricated: please use https://github.com/Actify-Inc/arangodb-net-standard
 
+## Depricated: please use https://github.com/Actify-Inc/arangodb-net-standard
+
+### BorderEast.ArangoDB.Client
 .NETCoreApp 2.0 ArangoDB Client Driver
 
 Contributions welcome.
